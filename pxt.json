@@ -13,7 +13,8 @@
         "main.blocks",
         "main.ts",
         "a_ReadBME688.md",
-        "b_DisplayScreen.md"
+        "b_DisplayScreen.md",
+        "c_DateandTime.md"
     ],
     "testFiles": [
         "test.ts"
