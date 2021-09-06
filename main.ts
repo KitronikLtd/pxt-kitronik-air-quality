@@ -75,7 +75,7 @@ enum PressureUnitList {
  */
 
 //% weight=100 color=#00A654 icon="\uf0c2" block="Air Quality"
-//% groups='["Control", "Show", "Draw", "Delete", "Advanced", "Set Time", "Set Date", "Read Time", "Read Date", "Alarm", "Setup", "Measure", "Climate", "Air Quality", "General Inputs/Outputs", "Write", "Read," "Setup", "Add Data", "Transfer"]'
+//% groups='["Show", "Delete", "Set Time", "Set Date", "Read Time", "Read Date", "Alarm", "Setup", "Measure", "Climate", "Air Quality", "Setup", "Add Data", "Transfer"]'
 namespace kitronik_air_quality {
     ////////////////////////////////
     //         ZIP LEDS           //
@@ -499,7 +499,7 @@ namespace kitronik_air_quality {
 
     /**
      * 'show' allows any number, string or variable to be displayed on the screen.
-     * The block is expandable to set the line and alignment.
+     * The block is expandable to set the line to display on.
      * @param line is line the text to be started on, eg: 1
      * @param inputData is the text will be show
      */
@@ -706,15 +706,14 @@ namespace kitronik_air_quality {
         // Subtract '1' from the line number to return correct y value
         y = (line - 1)
 
-        let col = 0
-        let charDisplayBytes = 0
-        let ind = 0
-
-        show("                          ", line) // Write 26 spaces to the selected line to clear it
+        set_pos(0, y)                               // Set the start position to write to (page addressing mode)
+        pageBuf.fill(0)
+        pageBuf[0] = 0x40
+        pins.i2cWriteBuffer(displayAddress, pageBuf)       // Send data to the screen
     }
 
     /**
-     * Clear all pixels, text and images on the screen.
+     * Clear all text on the screen.
      */
     //% blockId="kitronik_air_quality_clear" block="clear display"
     //% subcategory="Display"
@@ -1451,7 +1450,7 @@ namespace kitronik_air_quality {
     }
 
     /**
-    * Setup the gas sensor (defaults are 300°C and 150ms).
+    * Setup the gas sensor ready to measure gas resistance.
     */
     //% subcategory="Sensors"
     //% group="Setup"
@@ -1534,7 +1533,7 @@ namespace kitronik_air_quality {
     // Take 60 readings over a ~5min period and find the mean
     /**
     * Establish the baseline gas resistance reading and the ambient temperature.
-    * These values are required for air quality calculations
+    * These values are required for air quality calculations.
     */
     //% subcategory="Sensors"
     //% group="Setup"
@@ -1573,7 +1572,7 @@ namespace kitronik_air_quality {
     }
 
     /**
-    * Read Temperature from sensor as a Number.
+    * Read Temperature from the sensor as a number.
     * Units for temperature are in °C (Celsius) or °F (Fahrenheit) according to selection.
     */
     //% subcategory="Sensors"
@@ -1592,7 +1591,7 @@ namespace kitronik_air_quality {
     }
 
     /**
-    * Read Pressure from sensor as a Number.
+    * Read Pressure from the sensor as a number.
     * Units for pressure are in Pa (Pascals) or mBar (millibar) according to selection.
     */
     //% subcategory="Sensors"
@@ -1610,7 +1609,7 @@ namespace kitronik_air_quality {
     }
 
     /**
-    * Read Humidity from sensor as a Number.
+    * Read Humidity from the sensor as a number.
     * Humidity is output as a percentage.
     */
     //% subcategory="Sensors"
@@ -1915,7 +1914,8 @@ namespace kitronik_air_quality {
     }
 
     /**
-     * Captures and logs the data requested with the "include" blocks.
+     * Captures and logs all data to the EEPROM - "measure all data readigns" must be called first.
+     * (Date, Time, Temperature, Pressure, Humidity, IAQ Score, eCO2 and Light Level are all automatically added)
      */
     //% subcategory="Data Logging"
     //% group="Add Data"
@@ -2006,8 +2006,8 @@ namespace kitronik_air_quality {
     }
 
     /**
-     * Send all the stored data via comms selected
-     * Maximum of 1000 data entries stored
+     * Send all the stored data via USB to a connected computer.
+     * (Maximum of 1000 data entries stored)
      */
     //% subcategory="Data Logging"
     //% group="Transfer"
