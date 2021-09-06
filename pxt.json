@@ -14,7 +14,8 @@
         "main.ts",
         "a_ReadBME688.md",
         "b_DisplayScreen.md",
-        "c_DateandTime.md"
+        "c_DateandTime.md",
+        "d_DataLogging.md"
     ],
     "testFiles": [
         "test.ts"
