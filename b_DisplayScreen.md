@@ -112,7 +112,7 @@ input.onButtonPressed(Button.A, function () {
 ```
 
 ### Step 11
-Finally, click the **+** button on each ``||text:join||`` to add another textbox and then write in the units for each measurement.  
+To add the last detail, click the **+** button on each ``||text:join||`` to add another textbox and then write in the units for each measurement.  
 
 #### ~ tutorialhint
 ```blocks
@@ -123,6 +123,11 @@ input.onButtonPressed(Button.A, function () {
     kitronik_air_quality.show("Humidity: " + kitronik_air_quality.readHumidity() + " %", 3)
 })
 ```
+
+### Step 12
+Finally, it is a good idea to clear the screen before displaying new text, just in case the new readings have less characters than the previous ones (in which case, the old numbers would still be visible).  
+From the ``||kitronik_air_quality.Display||`` section, place a ``||kitronik_air_quality.clear display||`` block at the start of the ``||input:on button A press||`` block - this will clear everything from the screen before displaying the new readings.  
+(**Note:** It is also possible to clear a single line using the ``||kitronik_air_quality.clear line||`` block).  
 
 ### Step 8
 Click ``|Download|`` and transfer the code to the Air Quality Board.   
