@@ -1,5 +1,5 @@
 // This test program sets up the BME688 sensor and data logging, constantly displays date and time on the OLED screen, logs data on Button A and transfers data on Button B
-input.onButtonPressed(Button.A, function () {
+/*input.onButtonPressed(Button.A, function () {
     kitronik_air_quality.show("Logging", 4)
     for (let index = 0; index < 10; index++) {
         kitronik_air_quality.measureData()
@@ -28,4 +28,4 @@ basic.forever(function () {
     kitronik_air_quality.show(kitronik_air_quality.readTime(), 2)
     statusLEDs.setZipLedColor(1, kitronik_air_quality.hueToRGB(Math.map(kitronik_air_quality.readTemperature(kitronik_air_quality.TemperatureUnitList.C), -10, 40, 0, 360)))
     statusLEDs.show()
-})
+})*/

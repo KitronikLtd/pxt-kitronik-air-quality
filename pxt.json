@@ -11,7 +11,8 @@
     "files": [
         "README.md",
         "main.blocks",
-        "main.ts"
+        "main.ts",
+        "a_ReadBME688.md"
     ],
     "testFiles": [
         "test.ts"
