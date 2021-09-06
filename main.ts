@@ -1463,7 +1463,7 @@ namespace kitronik_air_quality {
         }
 
         // Define the target heater resistance from temperature (Heater Step 0)
-        i2cWrite(0x5A, intConvertGasTargetTemp(tAmbient, 300))     // Write the target temperature (300) to res_wait_0 register - heater step 0
+        i2cWrite(0x5A, intConvertGasTargetTemp(tAmbient, 300))     // Write the target temperature (300°C) to res_wait_0 register - heater step 0
 
         // Define the heater on time, converting ms to register code (Heater Step 0) - cannot be greater than 4032ms
         // Bits <7:6> are a multiplier (1, 4, 16 or 64 times)    Bits <5:0> are 1ms steps (0 to 63ms)
@@ -1914,7 +1914,7 @@ namespace kitronik_air_quality {
     }
 
     /**
-     * Captures and logs all data to the EEPROM - "measure all data readigns" must be called first.
+     * Captures and logs all data to the EEPROM - "measure all data readings" must be called first.
      * (Date, Time, Temperature, Pressure, Humidity, IAQ Score, eCO2 and Light Level are all automatically added)
      */
     //% subcategory="Data Logging"
