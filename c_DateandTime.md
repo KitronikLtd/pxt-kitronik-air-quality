@@ -7,9 +7,9 @@
 ### Introduction Step @unplugged
 The Air Quality Board comes with a Real Time Clock (RTC) which means it is accurately able to keep time. This is very useful for things like data logging where a time stamp is needed for seeing how things vary over time.  
   
-The "OLED Display Screen" tutorial should be completed before this one - if is has not been done, click [here](https://makecode.microbit.org/#tutorial:https://github.com/KitronikLtd/pxt-kitronik-smart-greenhouse/a_VisualThermometerTutorial) to access it.  
+The "OLED Display Screen" tutorial should be completed before this one - if is has not been done, click [here](https://makecode.microbit.org/#tutorial:https://github.com/KitronikLtd/pxt-kitronik-air-quality/b_DisplayScreen) to access it.  
 
-![Environmental Control Board with status LEDs on](https://KitronikLtd.github.io/pxt-kitronik-smart-greenhouse/assets/status-leds-SMALL.png)
+![Air Quality board with OLED screen displaying data](https://KitronikLtd.github.io/pxt-kitronik-air-quality/assets/air-quality-board.jpg)
 
 ### Step 1
 Setting the date and time is very straightforward.  

@@ -9,17 +9,17 @@ One of the main features of the Air Quality Board is that all of the sensor meas
 Using the EEPROM rather than the micro:bit means that much more data can be stored, and it is still kept even when the power supply to the board is removed.  
 This data can then be easily transferred to a computer via the micro:bit USB connector.  
     
-The "Date and Time" tutorial should be completed before this one - if is has not been done, click [here](https://makecode.microbit.org/#tutorial:https://github.com/KitronikLtd/pxt-kitronik-smart-greenhouse/a_VisualThermometerTutorial) to access it.  
+The "Date and Time" tutorial should be completed before this one - if is has not been done, click [here](https://makecode.microbit.org/#tutorial:https://github.com/KitronikLtd/pxt-kitronik-air-quality/c_DateandTime) to access it.  
 
-![Environmental Control Board with status LEDs on](https://KitronikLtd.github.io/pxt-kitronik-smart-greenhouse/assets/status-leds-SMALL.png)
+![Air Quality board with OLED screen displaying data](https://KitronikLtd.github.io/pxt-kitronik-air-quality/assets/air-quality-board.jpg)
 
 ### micro:bit Setup @unplugged
 For this tutorial, the BBC micro:bit plugged into the Air Quality Board needs to be connected via USB to a computer all the time, and the micro:bit needs to be 'Paired' within MakeCode (**Note:** To be able to 'Pair' in MakeCode, the micro:bit firmware must be 0249 or higher; click [here](https://microbit.org/get-started/user-guide/firmware/) for more information).  
   
 Once the micro:bit is connected via USB, click the three dots to the right of the ``|Download|`` button, then select "Pair device" from the list.  
-![GIF showing opening the Pairing window](https://KitronikLtd.github.io/pxt-kitronik-smart-greenhouse/assets/pair-microbit-part-1.gif)  
+![GIF showing opening the Pairing window](https://KitronikLtd.github.io/pxt-kitronik-air-quality/assets/pair-microbit-part-1.gif)  
 This will open the Pairing window. From there, click the ``|Pair device|`` button, select the connected micro:bit from the list and click "Connect".  
-![GIF showing connecting the micro:bit](https://KitronikLtd.github.io/pxt-kitronik-smart-greenhouse/assets/pair-microbit-part-2.gif)  
+![GIF showing connecting the micro:bit](https://KitronikLtd.github.io/pxt-kitronik-air-quality/assets/pair-microbit-part-2.gif)  
 The ``|Download|`` button should now have the USB symbol in front of it. The micro:bit is now paired and the rest of the tutorial can be completed.
 
 ### Step 1
@@ -143,21 +143,21 @@ There will now be 25 data entries stored on the EEPROM, ready to be transferred 
 Press ``||input:Button B||`` on the micro:bit. This will will make the "**Show console** Device" button appear under the micro:bit simulation image. Click on the new button.  
 
 #### ~ tutorialhint
-![Click on Show console button](https://KitronikLtd.github.io/pxt-kitronik-smart-greenhouse/assets/show-console-button.gif)
+![Click on Show console button](https://KitronikLtd.github.io/pxt-kitronik-air-quality/assets/show-console-button.gif)
 
 ### Step 2
 After clicking the console button, the code editor window will disappear and be replaced with either a white screen (in which case, press ``||input:Button B||`` again) or a screen with a scrolling chart at the top and the transmitted data text at the bottom - this is the console display.  
 In the top right corner of the window there are three buttons. To export and download the data as a text file, click the button furthest to the right.
 
 #### ~ tutorialhint
-![Export data as text file](https://KitronikLtd.github.io/pxt-kitronik-smart-greenhouse/assets/export-data-text-file.gif)
+![Export data as text file](https://KitronikLtd.github.io/pxt-kitronik-air-quality/assets/export-data-text-file.gif)
 
 ### Step 3
 Now open a new spreadsheet in Microsoft Excel (this has also been tested in Google Sheets and LibreOffice Calc, although they have a slightly different import process).  
 Select a cell in the spreadsheet, and then go to the "Data" tab in the top bar. Click on "From Text" to begin the data import process.
 
 #### ~ tutorialhint
-![Export data as text file](https://KitronikLtd.github.io/pxt-kitronik-smart-greenhouse/assets/excel-data-from-text.gif)
+![Export data as text file](https://KitronikLtd.github.io/pxt-kitronik-air-quality/assets/excel-data-from-text.gif)
 
 ### Step 4
 A File Explorer window will have now opened. Go the folder where the text file from MakeCode was downloaded (probably "Downloads") and select the file. Click the "Import" button at the bottom of the window. This will start the "Text Import Wizard".
@@ -168,6 +168,6 @@ Check the "Semicolon" box and uncheck the "Tab" box this will make sure that the
 In the final window, make sure "Existing worksheet" is checked as the import location and then click "OK". The data will now have been imported to the spreadsheet and is ready to be analysed, manipulated and understood. 
 
 #### ~ tutorialhint
-![Export data as text file](https://KitronikLtd.github.io/pxt-kitronik-smart-greenhouse/assets/excel-text-import-wizard.gif)
+![Export data as text file](https://KitronikLtd.github.io/pxt-kitronik-air-quality/assets/excel-text-import-wizard.gif)
 
 CODING COMPLETE! The tutorial is now complete - try out the others available to learn more about using the Kitronik Air Quality and Environmental Board.

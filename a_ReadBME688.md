@@ -7,7 +7,7 @@
 ### Introduction Step @unplugged
 To get started with the BME688, learn how to read climate data from the sensor and display it on the micro:bit LEDs.  
 
-![Environmental Control Board with status LEDs on](https://KitronikLtd.github.io/pxt-kitronik-smart-greenhouse/assets/status-leds-SMALL.png)
+![Air Quality board with OLED screen displaying data](https://KitronikLtd.github.io/pxt-kitronik-air-quality/assets/air-quality-board.jpg)
 
 ### Step 1
 Start by adding an ``||input:on button A pressed||`` block into the program.  

@@ -7,9 +7,9 @@
 ### Introduction Step @unplugged
 The Air Quality Board has a small but very useful OLED screen which can be used to display text, numbers and values stored in variables.  
   
-The "Read Measurements from the BME688" tutorial should be completed before this one - if is has not been done, click [here](https://makecode.microbit.org/#tutorial:https://github.com/KitronikLtd/pxt-kitronik-smart-greenhouse/a_VisualThermometerTutorial) to access it.  
+The "Read Measurements from the BME688" tutorial should be completed before this one - if is has not been done, click [here](https://makecode.microbit.org/#tutorial:https://github.com/KitronikLtd/pxt-kitronik-air-quality/a_ReadBME688) to access it.  
 
-![Environmental Control Board with status LEDs on](https://KitronikLtd.github.io/pxt-kitronik-smart-greenhouse/assets/status-leds-SMALL.png)
+![Air Quality board with OLED screen displaying data](https://KitronikLtd.github.io/pxt-kitronik-air-quality/assets/air-quality-board.jpg)
 
 ### Step 1
 To get started, place a ``||kitronik_air_quality.show||`` block from the ``||kitronik_air_quality.Display||`` section of the ``||kitronik_air_quality.Air Quality||`` category.  
