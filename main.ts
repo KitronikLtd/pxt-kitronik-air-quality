@@ -513,6 +513,7 @@ namespace kitronik_air_quality {
     export function show(inputData: any, line?: number) {
         let y = 0
         let x = 0
+        pageBuf.fill(0)
         let inputString = convertToText(inputData)
         inputString = inputString + " "
         if (initialised == 0) {
