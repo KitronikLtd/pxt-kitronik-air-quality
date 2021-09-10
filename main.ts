@@ -354,11 +354,6 @@ namespace kitronik_air_quality {
     //            OLED            //
     ////////////////////////////////
 
-    // ASCII Code to OLED 5x8 pixel character for display conversion
-    // font[0 - 31] are non-printable
-    // font[32 - 127]: SPACE ! " # $ % & ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ \ ] ^ _ ` a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ DEL
-    const font = [0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x0022d422, 0x00000000, 0x000002e0, 0x00018060, 0x00afabea, 0x00aed6ea, 0x01991133, 0x010556aa, 0x00000060, 0x000045c0, 0x00003a20, 0x00051140, 0x00023880, 0x00002200, 0x00021080, 0x00000100, 0x00111110, 0x0007462e, 0x00087e40, 0x000956b9, 0x0005d629, 0x008fa54c, 0x009ad6b7, 0x008ada88, 0x00119531, 0x00aad6aa, 0x0022b6a2, 0x00000140, 0x00002a00, 0x0008a880, 0x00052940, 0x00022a20, 0x0022d422, 0x00e4d62e, 0x000f14be, 0x000556bf, 0x0008c62e, 0x0007463f, 0x0008d6bf, 0x000094bf, 0x00cac62e, 0x000f909f, 0x000047f1, 0x0017c629, 0x0008a89f, 0x0008421f, 0x01f1105f, 0x01f4105f, 0x0007462e, 0x000114bf, 0x000b6526, 0x010514bf, 0x0004d6b2, 0x0010fc21, 0x0007c20f, 0x00744107, 0x01f4111f, 0x000d909b, 0x00117041, 0x0008ceb9, 0x0008c7e0, 0x01041041, 0x000fc620, 0x00010440, 0x01084210, 0x00000820, 0x010f4a4c, 0x0004529f, 0x00094a4c, 0x000fd288, 0x000956ae, 0x000097c4, 0x0007d6a2, 0x000c109f, 0x000003a0, 0x0006c200, 0x0008289f, 0x000841e0, 0x01e1105e, 0x000e085e, 0x00064a4c, 0x0002295e, 0x000f2944, 0x0001085c, 0x00012a90, 0x010a51e0, 0x010f420e, 0x00644106, 0x01e8221e, 0x00093192, 0x00222292, 0x00095b52, 0x0008fc80, 0x000003e0, 0x000013f1, 0x00841080, 0x0022d422];
-
     /**
      * Select the alignment of text
      */
@@ -390,112 +385,12 @@ namespace kitronik_air_quality {
     let displayAddress = DISPLAY_ADDR_1;
 
     // Text alignment, defaulted to "Left"
-    let displayShowAlign = ShowAlign.Left
-
-    // Plot variables
-    let plotArray: number[] = []
-    let plottingEnable = 0
-    let plotData = 0;
-    let graphYMin = 0
-    let graphYMax = 100
-    let graphRange = 100
-    let GRAPH_Y_MIN_LOCATION = 63
-    let GRAPH_Y_MAX_LOCATION = 20
-    let previousYPlot = 0
+    //let displayShowAlign = ShowAlign.Left
 
     // Screen buffers for sending data to the display
-    //let screenBuf = pins.createBuffer(1025);
-    // Different buffers for trying memory optimisation
-    //let pageBuf0 = pins.createBuffer(129);
-    //let pageBuf1 = pins.createBuffer(129);
-    //let pageBuf2 = pins.createBuffer(129);
-    //let pageBuf3 = pins.createBuffer(129);
-    //let pageBuf4 = pins.createBuffer(129);
-    //let pageBuf5 = pins.createBuffer(129);
-    //let pageBuf6 = pins.createBuffer(129);
-    //let pageBuf7 = pins.createBuffer(129);
     let pageBuf = pins.createBuffer(129);
 
-    let ackBuf = pins.createBuffer(2);
-    let writeOneByteBuf = pins.createBuffer(2);
-    let writeTwoByteBuf = pins.createBuffer(3);
-    let writeThreeByteBuf = pins.createBuffer(4);
-
     let initialised = 0    		// Flag to indicate automatic initalisation of the display
-
-    // Function to write one byte of data to the display
-    function writeOneByte(regValue: number) {
-        writeOneByteBuf[0] = 0;
-        writeOneByteBuf[1] = regValue;
-        pins.i2cWriteBuffer(displayAddress, writeOneByteBuf);
-    }
-
-    // Function to write two bytes of data to the display
-    function writeTwoByte(regValue1: number, regValue2: number) {
-        writeTwoByteBuf[0] = 0;
-        writeTwoByteBuf[1] = regValue1;
-        writeTwoByteBuf[2] = regValue2;
-        pins.i2cWriteBuffer(displayAddress, writeTwoByteBuf);
-    }
-
-    // Function to write three bytes of data to the display
-    function writeThreeByte(regValue1: number, regValue2: number, regValue3: number) {
-        writeThreeByteBuf[0] = 0;
-        writeThreeByteBuf[1] = regValue1;
-        writeThreeByteBuf[2] = regValue2;
-        writeThreeByteBuf[3] = regValue3;
-        pins.i2cWriteBuffer(displayAddress, writeThreeByteBuf);
-    }
-
-    // Set the starting on the display for writing text
-    function set_pos(col: number = 0, page: number = 0) {
-        writeOneByte(0xb0 | page) // page number
-        writeOneByte(0x00 | (col % 16)) // lower start column address
-        writeOneByte(0x10 | (col >> 4)) // upper start column address    
-    }
-
-    // Set the particular data byte on the screen for clearing
-    function clearBit(d: number, b: number): number {
-        if (d & (1 << b))
-            d -= (1 << b)
-        return d
-    }
-
-    /**
-     * Setup the display ready for use (function on available in text languages, not blocks)
-     */
-    export function initDisplay(): void {
-        // Load the ackBuffer to check if there is a display there before starting initalisation
-        ackBuf[0] = 0
-        ackBuf[1] = 0xAF
-        let ack = pins.i2cWriteBuffer(displayAddress, ackBuf)
-        if (ack == -1010) {      // If returned value back is -1010, there is no display so show error message
-            basic.showString("ERROR - no display")
-        }
-        else {   // Start initalising the display
-            writeOneByte(0xAE)              // SSD1306_DISPLAYOFF
-            writeOneByte(0xA4)              // SSD1306_DISPLAYALLON_RESUME
-            writeTwoByte(0xD5, 0xF0)        // SSD1306_SETDISPLAYCLOCKDIV
-            writeTwoByte(0xA8, 0x3F)        // SSD1306_SETMULTIPLEX
-            writeTwoByte(0xD3, 0x00)        // SSD1306_SETDISPLAYOFFSET
-            writeOneByte(0 | 0x0)           // line #SSD1306_SETSTARTLINE
-            writeTwoByte(0x8D, 0x14)        // SSD1306_CHARGEPUMP
-            writeTwoByte(0x20, 0x00)        // SSD1306_MEMORYMODE
-            writeThreeByte(0x21, 0, 127)    // SSD1306_COLUMNADDR
-            writeThreeByte(0x22, 0, 63)     // SSD1306_PAGEADDR
-            writeOneByte(0xa0 | 0x1)        // SSD1306_SEGREMAP
-            writeOneByte(0xc8)              // SSD1306_COMSCANDEC
-            writeTwoByte(0xDA, 0x12)        // SSD1306_SETCOMPINS
-            writeTwoByte(0x81, 0xCF)        // SSD1306_SETCONTRAST
-            writeTwoByte(0xd9, 0xF1)        // SSD1306_SETPRECHARGE
-            writeTwoByte(0xDB, 0x40)        // SSD1306_SETVCOMDETECT
-            writeOneByte(0xA6)              // SSD1306_NORMALDISPLAY
-            writeTwoByte(0xD6, 0)           // Zoom is set to off
-            writeOneByte(0xAF)              // SSD1306_DISPLAYON
-            initialised = 1
-            clear()
-        }
-    }
 
     /**
      * 'show' allows any number, string or variable to be displayed on the screen.
@@ -517,7 +412,7 @@ namespace kitronik_air_quality {
         let inputString = convertToText(inputData)
         inputString = inputString + " "
         if (initialised == 0) {
-            initDisplay()
+            kitronik_OLED.initDisplay()
         }
 
         // If text alignment has not been specified, default to "Left"
@@ -612,7 +507,7 @@ namespace kitronik_air_quality {
             //}
 
             for (let charOfString = 0; charOfString < displayString.length; charOfString++) {
-                charDisplayBytes = font[displayString.charCodeAt(charOfString)]
+                charDisplayBytes = kitronik_OLED.font[displayString.charCodeAt(charOfString)]
                 for (let k = 0; k < 5; k++) {  // 'for' loop will take byte font array and load it into the correct register, then shift to the next byte to load into the next location
                     col = 0
                     for (let l = 0; l < 5; l++) {
@@ -653,7 +548,7 @@ namespace kitronik_air_quality {
             ///// IT WILL SHOW TEXT ON ALL 8 LINES IF THEY ARE ALL SET AS SEPARATE 'show' BLOCKS           /////
             ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            set_pos(x * 5, y)                               // Set the start position to write to (page addressing mode)
+            kitronik_OLED.set_pos(x * 5, y)                               // Set the start position to write to (page addressing mode)
 
             //let ind02 = x * 5 + y * 128 
             //let buf2 = screenBuf.slice(ind02, ((ind + 1) - ind02))
@@ -701,13 +596,13 @@ namespace kitronik_air_quality {
         let y = 0
         let x = 0
         if (initialised == 0) {
-            initDisplay()
+            kitronik_OLED.initDisplay()
         }
 
         // Subtract '1' from the line number to return correct y value
         y = (line - 1)
 
-        set_pos(0, y)                               // Set the start position to write to (page addressing mode)
+        kitronik_OLED.set_pos(0, y)                               // Set the start position to write to (page addressing mode)
         pageBuf.fill(0)
         pageBuf[0] = 0x40
         pins.i2cWriteBuffer(displayAddress, pageBuf)       // Send data to the screen
@@ -722,7 +617,7 @@ namespace kitronik_air_quality {
     //% weight=63 blockGap=8
     export function clear() {
         if (initialised == 0) {
-            initDisplay()
+            kitronik_OLED.initDisplay()
         }
 
         //screenBuf.fill(0)       // Fill the screenBuf with all '0'
@@ -733,7 +628,7 @@ namespace kitronik_air_quality {
         pageBuf.fill(0)       // Fill the pageBuf with all '0'
         pageBuf[0] = 0x40
         for (let y = 0; y < 8; y++) {
-            set_pos(0, y)               // Set position to the start of the screen
+            kitronik_OLED.set_pos(0, y)               // Set position to the start of the screen
             pins.i2cWriteBuffer(displayAddress, pageBuf)  // Write clear buffer to the screen
         }
     }
@@ -1179,118 +1074,6 @@ namespace kitronik_air_quality {
         mBar
     }
 
-    // Useful BME688 Register Addresses
-    // Control
-    const CHIP_ADDRESS = 0x77    // I2C address as determined by hardware configuration
-    const CTRL_MEAS = 0x74       // Bit position <7:5>: Temperature oversampling   Bit position <4:2>: Pressure oversampling   Bit position <1:0>: Sensor power mode
-    const RESET = 0xE0           // Write 0xB6 to initiate soft-reset (same effect as power-on reset)
-    const CHIP_ID = 0xD0         // Read this to return the chip ID: 0x61 - good way to check communication is occurring
-    const CTRL_HUM = 0x72        // Bit position <2:0>: Humidity oversampling settings
-    const CONFIG = 0x75          // Bit position <4:2>: IIR filter settings
-    const CTRL_GAS_0 = 0x70      // Bit position <3>: Heater off (set to '1' to turn off current injection)
-    const CTRL_GAS_1 = 0x71      // Bit position <5> DATASHEET ERROR: Enable gas conversions to start when set to '1'   Bit position <3:0>: Heater step selection (0 to 9)
-
-    // Pressure Data
-    const PRESS_MSB_0 = 0x1F     // Forced & Parallel: MSB [19:12]
-    const PRESS_LSB_0 = 0x20     // Forced & Parallel: LSB [11:4]
-    const PRESS_XLSB_0 = 0x21    // Forced & Parallel: XLSB [3:0]
-
-    // Temperature Data
-    const TEMP_MSB_0 = 0x22      // Forced & Parallel: MSB [19:12]
-    const TEMP_LSB_0 = 0x23      // Forced & Parallel: LSB [11:4]
-    const TEMP_XLSB_0 = 0x24     // Forced & Parallel: XLSB [3:0]
-
-    // Humidity Data
-    const HUMID_MSB_0 = 0x25     // Forced & Parallel: MSB [15:8]
-    const HUMID_LSB_0 = 0x26     // Forced & Parallel: LSB [7:0]
-
-    // Gas Resistance Data
-    const GAS_RES_MSB_0 = 0x2C   // Forced & Parallel: MSB [9:2]
-    const GAS_RES_LSB_0 = 0x2D   // Forced & Parallel: Bit <7:6>: LSB [1:0]    Bit <5>: Gas valid    Bit <4>: Heater stability    Bit <3:0>: Gas resistance range
-
-    // Status
-    const MEAS_STATUS_0 = 0x1D   // Forced & Parallel: Bit <7>: New data    Bit <6>: Gas measuring    Bit <5>: Measuring    Bit <3:0>: Gas measurement index
-
-    //The following functions are for reading from and writing to the registers on the BME688
-    //function for reading register as unsigned 8 bit integer
-    function getUInt8BE(reg: number): number {
-        pins.i2cWriteNumber(CHIP_ADDRESS, reg, NumberFormat.UInt8BE);
-        return pins.i2cReadNumber(CHIP_ADDRESS, NumberFormat.UInt8BE);
-    }
-
-    //function for reading register as signed 8 bit integer (big endian)
-    function getInt8BE(reg: number): number {
-        pins.i2cWriteNumber(CHIP_ADDRESS, reg, NumberFormat.UInt8BE);
-        return pins.i2cReadNumber(CHIP_ADDRESS, NumberFormat.Int8BE);
-    }
-
-    // Function to convert unsigned ints to twos complement signed ints
-    function twosComp(value: number, bits: number): number {
-        if ((value & (1 << (bits - 1))) != 0) {
-            value = value - (1 << bits)
-        }
-        return value
-    }
-
-    // Write a buffer to a register
-    function i2cWrite(reg: number, data: number): void {
-        writeBuf[0] = reg
-        writeBuf[1] = data
-        pins.i2cWriteBuffer(CHIP_ADDRESS, writeBuf)
-    }
-
-    // Calibration parameters for compensation calculations
-    // Temperature
-    let PAR_T1 = twosComp((getUInt8BE(0xEA) << 8) | getUInt8BE(0xE9), 16)   // Signed 16-bit
-    let PAR_T2 = twosComp((getInt8BE(0x8B) << 8) | getInt8BE(0x8A), 16)     // Signed 16-bit
-    let PAR_T3 = getInt8BE(0x8C)                                            // Signed 8-bit
-
-    // Pressure
-    let PAR_P1 = (getUInt8BE(0x8F) << 8) | getUInt8BE(0x8E)                 // Always a positive number, do not do twosComp() conversion!
-    let PAR_P2 = twosComp((getUInt8BE(0x91) << 8) | getUInt8BE(0x90), 16)   // Signed 16-bit
-    let PAR_P3 = getInt8BE(0x92)                                            // Signed 8-bit
-    let PAR_P4 = twosComp((getUInt8BE(0x95) << 8) | getUInt8BE(0x94), 16)   // Signed 16-bit
-    let PAR_P5 = twosComp((getUInt8BE(0x97) << 8) | getUInt8BE(0x96), 16)   // Signed 16-bit
-    let PAR_P6 = getInt8BE(0x99)                                            // Signed 8-bit
-    let PAR_P7 = getInt8BE(0x98)                                            // Signed 8-bit
-    let PAR_P8 = twosComp((getUInt8BE(0x9D) << 8) | getUInt8BE(0x9C), 16)   // Signed 16-bit
-    let PAR_P9 = twosComp((getUInt8BE(0x9F) << 8) | getUInt8BE(0x9E), 16)   // Signed 16-bit
-    let PAR_P10 = getInt8BE(0xA0)                                           // Signed 8-bit
-
-    // Humidity
-    let parH1_LSB_parH2_LSB = getUInt8BE(0xE2)
-    let PAR_H1 = (getUInt8BE(0xE3) << 4) | (parH1_LSB_parH2_LSB & 0x0F)
-    let PAR_H2 = (getUInt8BE(0xE1) << 4) | (parH1_LSB_parH2_LSB >> 4)
-    let PAR_H3 = getInt8BE(0xE4)                                            // Signed 8-bit
-    let PAR_H4 = getInt8BE(0xE5)                                            // Signed 8-bit
-    let PAR_H5 = getInt8BE(0xE6)                                            // Signed 8-bit
-    let PAR_H6 = getInt8BE(0xE7)                                            // Signed 8-bit
-    let PAR_H7 = getInt8BE(0xE8)                                            // Signed 8-bit
-
-    // Gas resistance
-    let PAR_G1 = getInt8BE(0xED)                                            // Signed 8-bit
-    let PAR_G2 = twosComp((getUInt8BE(0xEC) << 8) | getUInt8BE(0xEB), 16)   // Signed 16-bit
-    let PAR_G3 = getUInt8BE(0xEE)                                           // Unsigned 8-bit
-    let RES_HEAT_RANGE = (getUInt8BE(0x02) >> 4) & 0x03
-    let RES_HEAT_VAL = twosComp(getUInt8BE(0x00), 8)                        // Signed 8-bit
-
-    // Oversampling rate constants
-    const OSRS_1X = 0x01
-    const OSRS_2X = 0x02
-    const OSRS_4X = 0x03
-    const OSRS_8X = 0x04
-    const OSRS_16X = 0x05
-
-    // IIR filter coefficient values
-    const IIR_0 = 0x00
-    const IIR_1 = 0x01
-    const IIR_3 = 0x02
-    const IIR_7 = 0x03
-    const IIR_15 = 0x04
-    const IIR_31 = 0x05
-    const IIR_63 = 0x06
-    const IIR_127 = 0x07
-
     //Global variables used for storing one copy of value, these are used in multiple locations for calculations
     let bme688InitFlag = false
     let gasInit = false
@@ -1319,130 +1102,14 @@ namespace kitronik_air_quality {
     let gResRaw = 0  // adc reading of raw gas resistance
     let gasRange = 0
 
-    // Compensation calculation intermediate variables (used across temperature, pressure, humidity and gas)
-    let var1 = 0
-    let var2 = 0
-    let var3 = 0
-    let var4 = 0
-    let var5 = 0
-    let var6 = 0
-
     let t_fine = 0                          // Intermediate temperature value used for pressure calculation
     let newAmbTemp = 0
     export let tAmbient = 0       // Intermediate temperature value used for heater calculation
     let ambTempFlag = false
 
-    // Temperature compensation calculation: rawADC to degrees C (integer)
-    export function calcTemperature(tempADC: number): void {
-        tPrev = tRead
-
-        var1 = (tempADC >> 3) - (PAR_T1 << 1)
-        var2 = (var1 * PAR_T2) >> 11
-        var3 = ((((var1 >> 1) * (var1 >> 1)) >> 12) * (PAR_T3 << 4)) >> 14
-        t_fine = var2 + var3
-        newAmbTemp = ((t_fine * 5) + 128) >> 8
-        tRead = newAmbTemp / 100     // Convert to floating point with 2 dp
-        if (ambTempFlag == false) {
-            tAmbient = newAmbTemp
-        }
-    }
-
-    // Pressure compensation calculation: rawADC to Pascals (integer)
-    export function intCalcPressure(pressureADC: number): void {
-        var1 = (t_fine >> 1) - 64000
-        var2 = ((((var1 >> 2) * (var1 >> 2)) >> 11) * PAR_P6) >> 2
-        var2 = var2 + ((var1 * PAR_P5) << 1)
-        var2 = (var2 >> 2) + (PAR_P4 << 16)
-        var1 = (((((var1 >> 2) * (var1 >> 2)) >> 13) * (PAR_P3 << 5)) >> 3) + ((PAR_P2 * var1) >> 1)
-        var1 = var1 >> 18
-        var1 = ((32768 + var1) * PAR_P1) >> 15
-        pRead = 1048576 - pressureADC
-        pRead = ((pRead - (var2 >> 12)) * 3125)
-
-        if (pRead >= (1 << 30)) {
-            pRead = Math.idiv(pRead, var1) << 1
-        }
-        else {
-            pRead = Math.idiv((pRead << 1), var1)
-        }
-
-        var1 = (PAR_P9 * (((pRead >> 3) * (pRead >> 3)) >> 13)) >> 12
-        var2 = ((pRead >> 2) * PAR_P8) >> 13
-        var3 = ((pRead >> 8) * (pRead >> 8) * (pRead >> 8) * PAR_P10) >> 17
-        pRead = pRead + ((var1 + var2 + var3 + (PAR_P7 << 7)) >> 4)
-    }
-
-    // Humidity compensation calculation: rawADC to % (integer)
-    // 'tempScaled' is the current reading from the Temperature sensor
-    export function intCalcHumidity(humidADC: number, tempScaled: number): void {
-        hPrev = hRead
-
-        var1 = humidADC - (PAR_H1 << 4) - (Math.idiv((tempScaled * PAR_H3), 100) >> 1)
-        var2 = (PAR_H2 * (Math.idiv((tempScaled * PAR_H4), 100) + Math.idiv(((tempScaled * (Math.idiv((tempScaled * PAR_H5), 100))) >> 6), 100) + ((1 << 14)))) >> 10
-        var3 = var1 * var2
-        var4 = ((PAR_H6 << 7) + (Math.idiv((tempScaled * PAR_H7), 100))) >> 4
-        var5 = ((var3 >> 14) * (var3 >> 14)) >> 10
-        var6 = (var4 * var5) >> 1
-        hRead = (var3 + var6) >> 12
-        hRead = (((var3 + var6) >> 10) * (1000)) >> 12
-        hRead = Math.idiv(hRead, 1000)
-    }
-
-    // Gas sensor heater target temperature to target resistance calculation
-    // 'ambientTemp' is reading from Temperature sensor in degC (could be averaged over a day when there is enough data?)
-    // 'targetTemp' is the desired temperature of the hot plate in degC (in range 200 to 400)
-    // Note: Heating duration also needs to be specified for each heating step in 'gas_wait' registers
-    export function intConvertGasTargetTemp(ambientTemp: number, targetTemp: number): number {
-        var1 = Math.idiv((ambientTemp * PAR_G3), 1000) << 8    // Divide by 1000 as we have ambientTemp in pre-degC format (i.e. 2500 rather than 25.00 degC)
-        var2 = (PAR_G1 + 784) * Math.idiv((Math.idiv(((PAR_G2 + 154009) * targetTemp * 5), 100) + 3276800), 10)
-        var3 = var1 + (var2 >> 1)
-        var4 = Math.idiv(var3, (RES_HEAT_RANGE + 4))
-        var5 = (131 * RES_HEAT_VAL) + 65536                 // Target heater resistance in Ohms
-        let resHeatX100 = ((Math.idiv(var4, var5) - 250) * 34)
-        let resHeat = Math.idiv((resHeatX100 + 50), 100)
-
-        return resHeat
-    }
-
-    // Gas resistance compensation calculation: rawADC & range to Ohms (integer)
-    export function intCalcGasResistance(gasADC: number, gasRange: number): void {
-        var1 = 262144 >> gasRange
-        //var2 = gasADC - 512
-        //var2 = var2 * 3
-        //var2 = 4096 + var2
-        var2 = 4096 + ((gasADC - 512) * 3)
-        let calcGasRes = Math.idiv((10000 * var1), var2)
-
-        gRes = calcGasRes * 100
-    }
-
     // Initialise the BME688, establishing communication, entering initial T, P & H oversampling rates, setup filter and do a first data reading (won't return gas)
     export function bme688Init(): void {
-        // Establish communication with BME688
-        writeBuf[0] = CHIP_ID
-        let chipID = getUInt8BE(writeBuf[0])
-        while (chipID != 0x61) {
-            chipID = getUInt8BE(writeBuf[0])
-        }
-
-        // Do a soft reset
-        i2cWrite(RESET, 0xB6)
-        basic.pause(1000)
-
-        // Set mode to SLEEP MODE: CTRL_MEAS reg <1:0>
-        i2cWrite(CTRL_MEAS, 0x00)
-
-        // Set the oversampling rates for Temperature, Pressure and Humidity
-        // Humidity: CTRL_HUM bits <2:0>
-        i2cWrite(CTRL_HUM, OSRS_2X)
-        // Temperature: CTRL_MEAS bits <7:5>     Pressure: CTRL_MEAS bits <4:2>    (Combine and write both in one command)
-        i2cWrite(CTRL_MEAS, (OSRS_2X << 5) | (OSRS_16X << 2))
-
-        // IIR Filter: CONFIG bits <4:2>
-        i2cWrite(CONFIG, IIR_3 << 2)
-
-        // Enable gas conversion: CTRL_GAS_1 bit <5>    (although datasheet says <4> - not sure what's going on here...)
-        i2cWrite(CTRL_GAS_1, 0x20)      // LOOKS LIKE IT'S BIT 5 NOT BIT 4 - NOT WHAT THE DATASHEET SAYS
+        kitronik_BME688.initialise()    // Call BME688 setup function in bme688-base extension
 
         bme688InitFlag = true
 
@@ -1463,16 +1130,7 @@ namespace kitronik_air_quality {
             bme688Init()
         }
 
-        // Define the target heater resistance from temperature (Heater Step 0)
-        i2cWrite(0x5A, intConvertGasTargetTemp(tAmbient, 300))     // Write the target temperature (300°C) to res_wait_0 register - heater step 0
-
-        // Define the heater on time, converting ms to register code (Heater Step 0) - cannot be greater than 4032ms
-        // Bits <7:6> are a multiplier (1, 4, 16 or 64 times)    Bits <5:0> are 1ms steps (0 to 63ms)
-        i2cWrite(0x64, 154)        // Write the coded duration (154) of 150ms to gas_wait_0 register - heater step 0
-
-        // Select index of heater step (0 to 9): CTRL_GAS_1 reg <3:0>    (Make sure to combine with gas enable setting already there)
-        let gasEnable = (getUInt8BE(writeBuf[0]) & 0x20)
-        i2cWrite(CTRL_GAS_1, 0x00 | gasEnable)          // Select heater step 0
+        kitronik_BME688.initGasSensor()     // Call BME688 gas sensor setup function in bme-688 base extension
 
         gasInit = true
     }
@@ -1492,42 +1150,15 @@ namespace kitronik_air_quality {
 
         measTimePrev = measTime       // Store previous measurement time (ms since micro:bit powered on)
 
-        // Set mode to FORCED MODE to begin single read cycle: CTRL_MEAS reg <1:0>    (Make sure to combine with temp/pressure oversampling settings already there)
-        let oSampleTP = getUInt8BE(writeBuf[0])
-        i2cWrite(CTRL_MEAS, 0x01 | oSampleTP)
-
-        // Check New Data bit to see if values have been measured: MEAS_STATUS_0 bit <7>
-        writeBuf[0] = MEAS_STATUS_0
-        let newData = (getUInt8BE(writeBuf[0]) & 0x80) >> 7
-        while (newData != 1) {
-            newData = (getUInt8BE(writeBuf[0]) & 0x80) >> 7
-        }
-
-        // Check Heater Stability Status bit to see if gas values have been measured: <4> (heater stability)
-        writeBuf[0] = GAS_RES_LSB_0
-        let heaterStable = (getUInt8BE(writeBuf[0]) & 0x10) >> 4
-
-        // If there is new data, read temperature ADC registers(this is required for all other calculations)
-        tRaw = (getUInt8BE(TEMP_MSB_0) << 12) | (getUInt8BE(TEMP_LSB_0) << 4) | (getUInt8BE(TEMP_XLSB_0) >> 4)
-
-        // Read pressure ADC registers
-        pRaw = (getUInt8BE(PRESS_MSB_0) << 12) | (getUInt8BE(PRESS_LSB_0) << 4) | (getUInt8BE(PRESS_XLSB_0) >> 4)
-
-        // Read humidity ADC registers
-        hRaw = (getUInt8BE(HUMID_MSB_0) << 8) | getUInt8BE(HUMID_LSB_0)
-
-        // Read gas resistance ADC registers
-        gResRaw = (getUInt8BE(GAS_RES_MSB_0) << 2) | (getUInt8BE(GAS_RES_LSB_0) >> 6)   // Shift bits <7:6> right to get LSB for gas resistance
-
-        gasRange = getUInt8BE(GAS_RES_LSB_0) & 0x0F
+        kitronik_BME688.readDataRegisters()     // Call function in bme-688 base extension to read out all the data registers
 
         measTime = control.millis()      // Capture latest measurement time (ms since micro:bit powered on)
 
         // Calculate the compensated reading values from the the raw ADC data
-        calcTemperature(tRaw)
-        intCalcPressure(pRaw)
-        intCalcHumidity(hRaw, tRead)
-        intCalcGasResistance(gResRaw, gasRange)
+        kitronik_BME688.calcTemperature(kitronik_BME688.tRaw)
+        kitronik_BME688.intCalcPressure(kitronik_BME688.pRaw)
+        kitronik_BME688.intCalcHumidity(kitronik_BME688.hRaw, kitronik_BME688.tRead)
+        kitronik_BME688.intCalcGasResistance(kitronik_BME688.gResRaw, kitronik_BME688.gasRange)
     }
 
     // A baseline gas resistance is required for the IAQ calculation - it should be taken in a well ventilated area without obvious air pollutants
@@ -1551,19 +1182,9 @@ namespace kitronik_air_quality {
 
         ambTempFlag = false
 
-        let burnInReadings = 0
-        let burnInData = 0
-        let ambTotal = 0
         show("Setting baselines", 4)
-        while (burnInReadings < 60) {               // Measure data and continue summing gas resistance until 60 readings have been taken
-            measureData()
-            burnInData += gRes
-            ambTotal += newAmbTemp
-            basic.pause(5000)
-            burnInReadings++
-        }
-        gBase = Math.trunc(burnInData / 60)             // Find the mean gas resistance during the period to form the baseline
-        tAmbient = Math.trunc(ambTotal / 60)    // Calculate the ambient temperature as the mean of the 60 initial readings
+
+        kitronik_BME688.establishBaselines()    // Call function in bme688-base to read and calculate the baselines for gas resistance and ambient temperature
 
         ambTempFlag = true
 
@@ -1582,7 +1203,7 @@ namespace kitronik_air_quality {
     //% block="Read Temperature in %temperature_unit"
     //% weight=100 blockGap=8
     export function readTemperature(temperature_unit: TemperatureUnitList): number {
-        let temperature = tRead
+        let temperature = kitronik_BME688.tRead
         // Change temperature from °C to °F if user selection requires it
         if (temperature_unit == TemperatureUnitList.F) {
             temperature = ((temperature * 18) + 320) / 10
@@ -1601,7 +1222,7 @@ namespace kitronik_air_quality {
     //% block="Read Pressure in %pressure_unit"
     //% weight=95 blockGap=8
     export function readPressure(pressure_unit: PressureUnitList): number {
-        let pressure = pRead
+        let pressure = kitronik_BME688.pRead
         //Change pressure from Pascals to millibar if user selection requires it
         if (pressure_unit == PressureUnitList.mBar)
             pressure = pressure / 100
@@ -1619,7 +1240,7 @@ namespace kitronik_air_quality {
     //% block="Read Humidity"
     //% weight=80 blockGap=8
     export function readHumidity(): number {
-        return hRead
+        return kitronik_BME688.hRead
     }
 
     /**
@@ -1638,9 +1259,9 @@ namespace kitronik_air_quality {
             show("Gas Sensor not setup!", 5)
             return 0
         }
-        calcAirQuality()
+        kitronik_BME688.calcAirQuality()
 
-        let eCO2 = eCO2Value
+        let eCO2 = kitronik_BME688.eCO2Value
 
         return eCO2
     }
@@ -1660,9 +1281,9 @@ namespace kitronik_air_quality {
             show("Gas Sensor not setup!", 5)
             return 0
         }
-        calcAirQuality()
+        kitronik_BME688.calcAirQuality()
 
-        return iaqPercent
+        return kitronik_BME688.iaqPercent
     }
 
     /**
@@ -1681,191 +1302,9 @@ namespace kitronik_air_quality {
             show("Gas Sensor not setup!", 5)
             return 0
         }
-        calcAirQuality()
+        kitronik_BME688.calcAirQuality()
 
-        return iaqScore
-    }
-
-    // Calculate the Index of Air Quality score from the current gas resistance and humidity readings
-    // iaqPercent: 0 to 100% - higher value = better air quality
-    // iaqScore: 25 should correspond to 'typically good' air, 250 to 'typically polluted' air
-    // airQualityRating: Text output based on the iaqScore
-    // Calculate the estimated CO2 value (eCO2)
-    export function calcAirQuality(): void {
-        let humidityScore = 0
-        let gasScore = 0
-        let humidityOffset = hRead - hBase         // Calculate the humidity offset from the baseline setting
-        let ambTemp = (tAmbient / 100)
-        let temperatureOffset = tRead - ambTemp     // Calculate the temperature offset from the ambient temperature
-        let humidityRatio = ((humidityOffset / hBase) + 1)
-        let temperatureRatio = (temperatureOffset / ambTemp)
-
-        // IAQ Calculations
-
-        if (humidityOffset > 0) {                                       // Different paths for calculating the humidity score depending on whether the offset is greater than 0
-            humidityScore = (100 - hRead) / (100 - hBase)
-        }
-        else {
-            humidityScore = hRead / hBase
-        }
-        humidityScore = humidityScore * hWeight * 100
-
-        let gasRatio = (gRes / gBase)
-
-        if ((gBase - gRes) > 0) {                                            // Different paths for calculating the gas score depending on whether the offset is greater than 0
-            gasScore = gasRatio * (100 * (1 - hWeight))
-        }
-        else {
-            // Make sure that when the gas offset and humidityOffset are 0, iaqPercent is 95% - leaves room for cleaner air to be identified
-            gasScore = Math.round(70 + (5 * (gasRatio - 1)))
-            if (gasScore > 75) {
-                gasScore = 75
-            }
-        }
-
-        iaqPercent = Math.trunc(humidityScore + gasScore)               // Air quality percentage is the sum of the humidity (25% weighting) and gas (75% weighting) scores
-        iaqScore = (100 - iaqPercent) * 5                               // Final air quality score is in range 0 - 500 (see BME688 datasheet page 11 for details)
-
-        // eCO2 Calculations
-
-        eCO2Value = 250 * Math.pow(Math.E, (0.012 * iaqScore))      // Exponential curve equation to calculate the eCO2 from an iaqScore input
-
-        // Adjust eCO2Value for humidity and/or temperature greater than the baseline values
-        if (humidityOffset > 0) {
-            if (temperatureOffset > 0) {
-                eCO2Value = eCO2Value * (humidityRatio + temperatureRatio)
-            }
-            else {
-                eCO2Value = eCO2Value * humidityRatio
-            }
-        }
-        else if (temperatureOffset > 0) {
-            eCO2Value = eCO2Value * (temperatureRatio + 1)
-        }
-
-        // If measurements are taking place rapidly, breath detection is possible due to the sudden increase in humidity (~7-10%)
-        // If this increase happens within a 5s time window, 1200ppm is added to the eCO2 value
-        // (These values were based on 'breath-testing' with another eCO2 sensor with algorithms built-in)
-        //if ((measTime - measTimePrev) <= 5000) {
-        //    if ((hRead - hPrev) >= 3) {
-        //        eCO2Value = eCO2Value + 1500
-        //    }
-        //}
-
-        eCO2Value = Math.trunc(eCO2Value)
-    }
-
-    ////////////////////////////////
-    //           EEPROM           //
-    ////////////////////////////////
-
-    let CAT24_I2C_BASE_ADDR = 0x54  // This is A16 = 0, setting A16 = 1 will change address to 0x55
-
-    /**
-     * Write a single byte to a specified address
-     * @param data is the data which will be written (a single byte)
-     * @param addr is the EEPROM address, eg: 0
-     */
-    export function writeByte(data: any, addr: number): void {
-        if (addr < 0) {
-            addr = 0
-        }
-        if (addr > 131071) {
-            addr = 131071
-        }
-
-        let buf = pins.createBuffer(3);                             // Create buffer for holding addresses & data to write
-        let i2cAddr = 0
-
-        if ((addr >> 16) == 0) {                                    // Select the required address (A16 as 0 or 1)
-            i2cAddr = CAT24_I2C_BASE_ADDR                           // A16 = 0
-        }
-        else {
-            i2cAddr = CAT24_I2C_BASE_ADDR + 1                       // A16 = 1
-        }
-
-        buf[0] = (addr >> 8) & 0xFF                                 // Memory location bits a15 - a8
-        buf[1] = addr & 0xFF                                        // Memory location bits a7 - a0
-        buf[2] = data                                               // Store the data in the buffer
-        pins.i2cWriteBuffer(i2cAddr, buf, false)                    // Write the data to the correct address
-
-        buf = null // Try to free up memory
-    }
-
-    // Split the EEPROM pages in half to make 128 byte blocks
-    // Write to a single block
-    export function writeBlock(data: string, block: number): void {
-        let dataLength = data.length
-        let buf = pins.createBuffer(dataLength + 2);                  // Create buffer for holding addresses & data to write
-        let i2cAddr = 0
-        let startAddr = block * 128
-
-        if ((startAddr >> 16) == 0) {                               // Select the required address (A16 as 0 or 1)
-            i2cAddr = CAT24_I2C_BASE_ADDR                           // A16 = 0
-        }
-        else {
-            i2cAddr = CAT24_I2C_BASE_ADDR + 1                       // A16 = 1
-        }
-
-        buf[0] = (startAddr >> 8) & 0xFF                            // Memory location bits a15 - a8
-        buf[1] = startAddr & 0xFF                                   // Memory location bits a7 - a0
-
-        for (let i = 0; i < dataLength; i++) {
-            let ascii = data.charCodeAt(i)
-            buf[i + 2] = ascii                                        // Store the data in the buffer
-        }
-
-        pins.i2cWriteBuffer(i2cAddr, buf, false)                    // Write the data to the correct address
-
-        buf = null // Try to free up memory
-    }
-
-    // Read a data entry from a single block
-    export function readBlock(block: number): string {
-        let startAddr = block * 128
-        let byte = 0
-        let entry = ""
-
-        for (byte = 0; byte < 127; byte++) {
-            entry = entry + String.fromCharCode(readByte(startAddr + byte))
-        }
-
-        entry = entry.substr(0, entry.indexOf("£"))
-
-        return entry
-    }
-
-    /**
-     * Read a single byte from a specified address
-     * @param addr is EEPROM address, eg: 0
-     */
-    export function readByte(addr: number): number {
-        if (addr < 0) {
-            addr = 0
-        }
-        if (addr > 131071) {
-            addr = 131071
-        }
-
-        let writeBuf = pins.createBuffer(2)                         // Create a buffer for holding addresses
-        let readBuf = pins.createBuffer(1)                          // Create a buffer for storing read data
-        let i2cAddr = 0
-
-        if ((addr >> 16) == 0) {                                    // Select the required address (A16 as 0 or 1)
-            i2cAddr = CAT24_I2C_BASE_ADDR                           // A16 = 0
-        }
-        else {
-            i2cAddr = CAT24_I2C_BASE_ADDR + 1                       // A16 = 1
-        }
-
-        writeBuf[0] = (addr >> 8) & 0xFF                            // Memory location bits a15 - a8
-        writeBuf[1] = addr & 0xFF                                   // Memory location bits a7 - a0
-        pins.i2cWriteBuffer(i2cAddr, writeBuf, false)               // Write to the address to prepare for read operation
-
-        readBuf = pins.i2cReadBuffer(i2cAddr, 1, false)             // Read the data at the correct address into the buffer
-        let readData = readBuf[0]                                   // Store the data from the buffer as a variable
-
-        return readData                                             // Return the variable so the data can be accessed
+        return kitronik_BME688.iaqScore
     }
 
     ////////////////////////////////
@@ -1883,17 +1322,17 @@ namespace kitronik_air_quality {
     // Store the Kitronik Header and standard data column headings in the reserved metadata EEPROM blocks
     function storeTitles(): void {
         let kitronikHeader = "Kitronik Data Logger - Air Quality & Environmental Board for BBC micro:bit - www.kitronik.co.uk\r\n£"
-        writeBlock(kitronikHeader, 21)
+        kitronik_EEPROM.writeBlock(kitronikHeader, 21)
 
         basic.pause(100)
 
         let headings = "Date" + delimiter + "Time" + delimiter + "Temperature" + delimiter + "Pressure" + delimiter + "Humidity" + delimiter + "IAQ Score" + delimiter + "eCO2" + delimiter + "Light" + delimiter + "\r\n£"
 
-        writeBlock(headings, 23)
+        kitronik_EEPROM.writeBlock(headings, 23)
 
         writeTitles = true
 
-        entryNum = (readByte(12 * 128) << 8) | (readByte((12 * 128) + 1))              // Read from block 12 how many entries have been stored so far
+        entryNum = (kitronik_EEPROM.readByte(12 * 128) << 8) | (kitronik_EEPROM.readByte((12 * 128) + 1))              // Read from block 12 how many entries have been stored so far
         entryNum = entryNum & 0xFFF
     }
 
@@ -1911,7 +1350,7 @@ namespace kitronik_air_quality {
     export function addProjectInfo(name: string, subject: string): void {
         let projectInfo = "Name: " + name + "\r\n" + "Subject: " + subject + "\r\n£"
 
-        writeBlock(projectInfo, 22)
+        kitronik_EEPROM.writeBlock(projectInfo, 22)
     }
 
     /**
@@ -1928,16 +1367,16 @@ namespace kitronik_air_quality {
             storeTitles()
         }
 
-        calcAirQuality()
+        kitronik_BME688.calcAirQuality()
 
         dataEntry = readDate() + delimiter + readTime() + delimiter + readTemperature(TemperatureUnitList.C) + delimiter + readPressure(PressureUnitList.Pa) + delimiter + hRead + delimiter + iaqScore + delimiter + eCO2Value + delimiter + input.lightLevel() + delimiter
 
-        writeBlock(dataEntry + "\r\n£", firstDataBlock + entryNum)
+        kitronik_EEPROM.writeBlock(dataEntry + "\r\n£", firstDataBlock + entryNum)
 
         basic.pause(100)
 
         // Store the current entry number at first bytes of block 12
-        //writeBlock(convertToText(entryNum), 12)     // More memory efficient that writing the bytes separately
+        //kitronik_EEPROM.writeBlock(convertToText(entryNum), 12)     // More memory efficient that writing the bytes separately
         let storedEntryNum = entryNum | 0x1000
         let buf = pins.createBuffer(4)
         buf[0] = 0x06
@@ -1946,8 +1385,8 @@ namespace kitronik_air_quality {
         buf[3] = storedEntryNum & 0xFF
         pins.i2cWriteBuffer(0x54, buf, false)
 
-        //writeByte((storedEntryNum >> 8), (12 * 128))              // Entry Number High Byte
-        //writeByte((storedEntryNum & 0xFF), ((12 * 128) + 1))      // Entry Number Low Byte
+        //kitronik_EEPROM.writeByte((storedEntryNum >> 8), (12 * 128))              // Entry Number High Byte
+        //kitronik_EEPROM.writeByte((storedEntryNum & 0xFF), ((12 * 128) + 1))      // Entry Number Low Byte
 
         if (entryNum == 999) {
             dataFull = true
@@ -1979,10 +1418,10 @@ namespace kitronik_air_quality {
         for (let block = 0; block < 1024; block++) {
             addr = block * 128
             if ((addr >> 16) == 0) {                               // Select the required address (A16 as 0 or 1)
-                i2cAddr = CAT24_I2C_BASE_ADDR                           // A16 = 0
+                i2cAddr = kitronik_EEPROM.CAT24_I2C_BASE_ADDR                           // A16 = 0
             }
             else {
-                i2cAddr = CAT24_I2C_BASE_ADDR + 1                       // A16 = 1
+                i2cAddr = kitronik_EEPROM.CAT24_I2C_BASE_ADDR + 1                       // A16 = 1
             }
 
             blankBlock[0] = (addr >> 8) & 0xFF                            // Memory location bits a15 - a8
@@ -2025,25 +1464,25 @@ namespace kitronik_air_quality {
         let titles = ""
         let data = ""
 
-        header = readBlock(21)
+        header = kitronik_EEPROM.readBlock(21)
         serial.writeString(header)      // Send Kitronik Header
-        info = readBlock(22)
+        info = kitronik_EEPROM.readBlock(22)
         serial.writeString(info)        // Send Project Info
-        titles = readBlock(23)
+        titles = kitronik_EEPROM.readBlock(23)
         serial.writeString(titles)      // Send Data Column Headings
 
         if (dataFull) {
             for (block = firstDataBlock; block < 1024; block++) {
-                data = readBlock(block)
+                data = kitronik_EEPROM.readBlock(block)
                 serial.writeString(data)
             }
         }
         else {
-            let readLastEntry = (readByte(12 * 128) << 8) | (readByte((12 * 128) + 1))              // Read from block 12 how many entries have been stored so far
+            let readLastEntry = (kitronik_EEPROM.readByte(12 * 128) << 8) | (kitronik_EEPROM.readByte((12 * 128) + 1))              // Read from block 12 how many entries have been stored so far
             lastEntry = readLastEntry & 0xFFF
             show(lastEntry, 4)
             for (block = firstDataBlock; block < (firstDataBlock + lastEntry + 1); block++) {
-                data = readBlock(block)
+                data = kitronik_EEPROM.readBlock(block)
                 serial.writeString(data)
             }
         }
