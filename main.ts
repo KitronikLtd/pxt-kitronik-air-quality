@@ -390,8 +390,6 @@ namespace kitronik_air_quality {
     // Screen buffers for sending data to the display
     let pageBuf = pins.createBuffer(129);
 
-    let initialised = 0    		// Flag to indicate automatic initalisation of the display
-
     /**
      * 'show' allows any number, string or variable to be displayed on the screen.
      * The block is expandable to set the line to display on.
@@ -411,7 +409,7 @@ namespace kitronik_air_quality {
         pageBuf.fill(0)
         let inputString = convertToText(inputData)
         inputString = inputString + " "
-        if (initialised == 0) {
+        if (kitronik_OLED.initialised == 0) {
             kitronik_OLED.initDisplay()
         }
 
@@ -595,7 +593,7 @@ namespace kitronik_air_quality {
     export function clearLine(line: number) {
         let y = 0
         let x = 0
-        if (initialised == 0) {
+        if (kitronik_OLED.initialised == 0) {
             kitronik_OLED.initDisplay()
         }
 
@@ -616,7 +614,7 @@ namespace kitronik_air_quality {
     //% group="Delete"
     //% weight=63 blockGap=8
     export function clear() {
-        if (initialised == 0) {
+        if (kitronik_OLED.initialised == 0) {
             kitronik_OLED.initDisplay()
         }
 
