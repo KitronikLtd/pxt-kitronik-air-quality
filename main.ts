@@ -1103,7 +1103,6 @@ namespace kitronik_air_quality {
     let t_fine = 0                          // Intermediate temperature value used for pressure calculation
     let newAmbTemp = 0
     export let tAmbient = 0       // Intermediate temperature value used for heater calculation
-    let ambTempFlag = false
 
     // Initialise the BME688, establishing communication, entering initial T, P & H oversampling rates, setup filter and do a first data reading (won't return gas)
     export function bme688Init(): void {
@@ -1146,11 +1145,7 @@ namespace kitronik_air_quality {
             bme688Init()
         }
 
-        measTimePrev = measTime       // Store previous measurement time (ms since micro:bit powered on)
-
         kitronik_BME688.readDataRegisters()     // Call function in bme-688 base extension to read out all the data registers
-
-        measTime = control.millis()      // Capture latest measurement time (ms since micro:bit powered on)
 
         // Calculate the compensated reading values from the the raw ADC data
         kitronik_BME688.calcTemperature(kitronik_BME688.tRaw)
@@ -1178,13 +1173,9 @@ namespace kitronik_air_quality {
             setupGasSensor()
         }
 
-        ambTempFlag = false
-
         show("Setting baselines", 4)
 
         kitronik_BME688.establishBaselines()    // Call function in bme688-base to read and calculate the baselines for gas resistance and ambient temperature
-
-        ambTempFlag = true
 
         show("Setup Complete!", 5)
         basic.pause(2000)
