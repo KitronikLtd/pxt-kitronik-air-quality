@@ -75,7 +75,7 @@ enum PressureUnitList {
  */
 
 //% weight=100 color=#00A654 icon="\uf0c2" block="Air Quality"
-//% groups='["Show", "Delete", "Set Time", "Set Date", "Read Time", "Read Date", "Alarm", "Setup", "Measure", "Climate", "Air Quality", "Setup", "Add Data", "Transfer"]'
+//% groups='["Show", "Delete", "Set Time", "Set Date", "Read Time", "Read Date", "Alarm", "Setup", "Measure", "Climate", "Air Quality", "Settings", "Add Data", "Transfer"]'
 namespace kitronik_air_quality {
     ////////////////////////////////
     //         ZIP LEDS           //
@@ -1340,7 +1340,7 @@ namespace kitronik_air_quality {
      * @param subject area of the data logging project
      */
     //% subcategory="Data Logging"
-    //% group="Setup"
+    //% group="Settings"
     //% weight=80 blockGap=8
     //% blockId=kitronik_air_quality_project_info
     //% block="add project info: Name %name|Subject %subject"
