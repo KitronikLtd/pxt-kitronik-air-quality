@@ -1469,7 +1469,6 @@ namespace kitronik_air_quality {
         else {
             let readLastEntry = (kitronik_EEPROM.readByte(12 * 128) << 8) | (kitronik_EEPROM.readByte((12 * 128) + 1))              // Read from block 12 how many entries have been stored so far
             lastEntry = readLastEntry & 0xFFF
-            show(lastEntry, 4)
             for (block = firstDataBlock; block < (firstDataBlock + lastEntry + 1); block++) {
                 data = kitronik_EEPROM.readBlock(block)
                 serial.writeString(data)
