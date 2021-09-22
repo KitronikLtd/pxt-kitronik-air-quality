@@ -1358,7 +1358,7 @@ namespace kitronik_air_quality {
 
         kitronik_BME688.calcAirQuality()
 
-        dataEntry = readDate() + delimiter + readTime() + delimiter + readTemperature(TemperatureUnitList.C) + delimiter + readPressure(PressureUnitList.Pa) + delimiter + hRead + delimiter + iaqScore + delimiter + eCO2Value + delimiter + input.lightLevel() + delimiter
+        dataEntry = readDate() + delimiter + readTime() + delimiter + readTemperature(TemperatureUnitList.C) + delimiter + readPressure(PressureUnitList.Pa) + delimiter + readHumidity() + delimiter + getAirQualityScore() + delimiter + readeCO2() + delimiter + input.lightLevel() + delimiter
 
         kitronik_EEPROM.writeBlock(dataEntry + "\r\n£", firstDataBlock + entryNum)
 
