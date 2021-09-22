@@ -1,6 +1,6 @@
 {
     "name": "pxt-kitronik-air-quality",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "description": "",
     "dependencies": {
         "core": "*",
