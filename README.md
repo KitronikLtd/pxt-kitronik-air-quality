@@ -243,19 +243,10 @@ input.onButtonPressed(Button.A, function () {
     kitronik_air_quality.sendAllData()
 })
 ```
-
-<script src="https://makecode.com/gh-pages-embed.js"></script><script>makeCodeRender("{{ site.makecode.home_url }}", "{{ site.github.owner_name }}/{{ site.github.repository_name }}");</script> 
   
 ## License
 
 MIT
-
-## Blocks preview
-
-This image shows the blocks code from the last commit in master.
-This image may take a few minutes to refresh.
-
-![A rendered view of the blocks](https://github.com/kitronikltd/pxt-kitronik-air-quality/raw/master/.github/makecode/blocks.png)
 
 #### Metadata (used for search, rendering)
 
