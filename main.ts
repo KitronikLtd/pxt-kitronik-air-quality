@@ -1073,42 +1073,14 @@ namespace kitronik_air_quality {
     }
 
     //Global variables used for storing one copy of value, these are used in multiple locations for calculations
-    let bme688InitFlag = false
-    let gasInit = false
-    let writeBuf = pins.createBuffer(2)
-
-    // Calculated readings of sensor parameters from raw adc readings
-    export let tRead = 0
-    export let pRead = 0
-    export let hRead = 0
-    export let gRes = 0
-    export let iaqPercent = 0
-    export let iaqScore = 0
-    export let eCO2Value = 0
-
-    let gBase = 0
-    let hBase = 40        // Between 30% & 50% is a widely recognised optimal indoor humidity, 40% is a good middle ground
-    let hWeight = 0.25     // Humidity contributes 25% to the IAQ score, gas resistance is 75%
-    let tPrev = 0
-    let hPrev = 0
-    let measTime = 0
-    let measTimePrev = 0
-
-    let tRaw = 0    // adc reading of raw temperature
-    let pRaw = 0       // adc reading of raw pressure
-    let hRaw = 0       // adc reading of raw humidity
-    let gResRaw = 0  // adc reading of raw gas resistance
-    let gasRange = 0
-
-    let t_fine = 0                          // Intermediate temperature value used for pressure calculation
-    let newAmbTemp = 0
-    export let tAmbient = 0       // Intermediate temperature value used for heater calculation
+    let bme688InitialiseFlag = false
+    let gasInitialise = false
 
     // Initialise the BME688, establishing communication, entering initial T, P & H oversampling rates, setup filter and do a first data reading (won't return gas)
     export function bme688Init(): void {
         kitronik_BME688.initialise()    // Call BME688 setup function in bme688-base extension
 
-        bme688InitFlag = true
+        bme688InitialiseFlag = true
 
         // Do an initial data read (will only return temperature, pressure and humidity as no gas sensor parameters have been set)
         measureData()
@@ -1123,13 +1095,13 @@ namespace kitronik_air_quality {
     //% block="setup gas sensor"
     //% weight=100 blockGap=8
     export function setupGasSensor(): void {
-        if (bme688InitFlag == false) {
+        if (bme688InitialiseFlag == false) {
             bme688Init()
         }
 
         kitronik_BME688.initGasSensor()     // Call BME688 gas sensor setup function in bme-688 base extension
 
-        gasInit = true
+        gasInitialise = true
     }
 
     /**
@@ -1141,7 +1113,7 @@ namespace kitronik_air_quality {
     //% block="measure all data readings"
     //% weight=100 blockGap=8
     export function measureData(): void {
-        if (bme688InitFlag == false) {
+        if (bme688InitialiseFlag == false) {
             bme688Init()
         }
 
@@ -1166,10 +1138,10 @@ namespace kitronik_air_quality {
     //% block="establish gas baseline & ambient temperature"
     //% weight=85 blockGap=8
     export function calcBaselines(): void {
-        if (bme688InitFlag == false) {
+        if (bme688InitialiseFlag == false) {
             bme688Init()
         }
-        if (gasInit == false) {
+        if (gasInitialise == false) {
             setupGasSensor()
         }
 
@@ -1242,7 +1214,7 @@ namespace kitronik_air_quality {
     //% block="Read eCO2"
     //% weight=95 blockGap=8
     export function readeCO2(): number {
-        if (gasInit == false) {
+        if (gasInitialise == false) {
             clear()
             show("ERROR", 3)
             show("Gas Sensor not setup!", 5)
@@ -1264,7 +1236,7 @@ namespace kitronik_air_quality {
     //% block="get IAQ \\%"
     //% weight=85 blockGap=8
     export function getAirQualityPercent(): number {
-        if (gasInit == false) {
+        if (gasInitialise == false) {
             clear()
             show("ERROR", 3)
             show("Gas Sensor not setup!", 5)
@@ -1285,7 +1257,7 @@ namespace kitronik_air_quality {
     //% block="get IAQ Score"
     //% weight=100 blockGap=8
     export function getAirQualityScore(): number {
-        if (gasInit == false) {
+        if (gasInitialise == false) {
             clear()
             show("ERROR", 3)
             show("Gas Sensor not setup!", 5)
