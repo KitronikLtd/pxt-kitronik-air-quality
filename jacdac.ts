@@ -10,26 +10,33 @@ namespace kitronik_air_quality {
         }
 
         handlePacket(pkt: jacdac.JDPacket): void {
-            this.textDirection = this.handleRegValue(pkt, jacdac.CharacterScreenReg.TextDirection, "u8",this.textDirection)
+            this.textDirection = this.handleRegValue(
+                pkt,
+                jacdac.CharacterScreenReg.TextDirection,
+                "u8",
+                this.textDirection
+            )
             this.handleRegUInt32(pkt, jacdac.CharacterScreenReg.Columns, 26) // NUMBER_OF_CHAR_PER_LINE
             this.handleRegUInt32(pkt, jacdac.CharacterScreenReg.Rows, 8) // NUMBER_OF_CHAR_PER_LINE
 
             const oldMessage = this.message
-            this.message = this.handleRegValue(pkt, jacdac.CharacterScreenReg.Message, "s", this.message);
-            if (this.message != oldMessage)
-                this.syncMessage();
+            this.message = this.handleRegValue(
+                pkt,
+                jacdac.CharacterScreenReg.Message,
+                "s",
+                this.message
+            )
+            if (this.message != oldMessage) this.syncMessage()
         }
 
         private syncMessage() {
-            if (!this.message)
-                kitronik_air_quality.clear()
+            if (!this.message) kitronik_air_quality.clear()
             else {
                 const lines = this.message.split("\n")
-                let i = 0;
+                let i = 0
                 for (; i < lines.length; ++i)
                     kitronik_air_quality.show(lines[i], i + 1)
-                for (; i < 8; ++i)
-                    kitronik_air_quality.show("", i + 1)
+                for (; i < 8; ++i) kitronik_air_quality.show("", i + 1)
             }
         }
     }
@@ -38,23 +45,60 @@ namespace kitronik_air_quality {
     class RealTimeClockServer extends jacdac.Server {
         constructor() {
             super("clock", jacdac.SRV_REAL_TIME_CLOCK, {
-                variant: jacdac.RealTimeClockVariant.Crystal
+                variant: jacdac.RealTimeClockVariant.Crystal,
             })
         }
         handlePacket(pkt: jacdac.JDPacket): void {
-            if (pkt.isRegGet && pkt.regCode == jacdac.RealTimeClockReg.LocalTime) {
-                const year = kitronik_air_quality.readDateParameter(DateParameter.Year)
-                const month = kitronik_air_quality.readDateParameter(DateParameter.Month)
-                const dayOfMonth = kitronik_air_quality.readDateParameter(DateParameter.Day)
+            if (
+                pkt.isRegGet &&
+                pkt.regCode == jacdac.RealTimeClockReg.LocalTime
+            ) {
+                const year = kitronik_air_quality.readDateParameter(
+                    DateParameter.Year
+                )
+                const month = kitronik_air_quality.readDateParameter(
+                    DateParameter.Month
+                )
+                const dayOfMonth = kitronik_air_quality.readDateParameter(
+                    DateParameter.Day
+                )
                 const dayOfWeek = 0
-                const hour = kitronik_air_quality.readTimeParameter(TimeParameter.Hours)
-                const min = kitronik_air_quality.readTimeParameter(TimeParameter.Minutes)
-                const sec = kitronik_air_quality.readTimeParameter(TimeParameter.Seconds)
-                this.handleRegFormat(pkt, jacdac.RealTimeClockReg.LocalTime, "u16 u8 u8 u8 u8 u8 u8", [year + YEAR_OFFSET, month, dayOfMonth, dayOfWeek, hour, min, sec])
-            }
-            else if (pkt.isCommand && pkt.serviceCommand == jacdac.RealTimeClockCmd.SetTime) {
-                const [year, month, dayOfMonth, dayOfWeek, hour, min, sec] = pkt.jdunpack<[number, number, number, number, number, number, number]>("u16 u8 u8 u8 u8 u8 u8")
-                kitronik_air_quality.setDate(dayOfMonth, month, year % YEAR_OFFSET)
+                const hour = kitronik_air_quality.readTimeParameter(
+                    TimeParameter.Hours
+                )
+                const min = kitronik_air_quality.readTimeParameter(
+                    TimeParameter.Minutes
+                )
+                const sec = kitronik_air_quality.readTimeParameter(
+                    TimeParameter.Seconds
+                )
+                this.handleRegFormat(
+                    pkt,
+                    jacdac.RealTimeClockReg.LocalTime,
+                    "u16 u8 u8 u8 u8 u8 u8",
+                    [
+                        year + YEAR_OFFSET,
+                        month,
+                        dayOfMonth,
+                        dayOfWeek,
+                        hour,
+                        min,
+                        sec,
+                    ]
+                )
+            } else if (
+                pkt.isCommand &&
+                pkt.serviceCommand == jacdac.RealTimeClockCmd.SetTime
+            ) {
+                const [year, month, dayOfMonth, dayOfWeek, hour, min, sec] =
+                    pkt.jdunpack<
+                        [number, number, number, number, number, number, number]
+                    >("u16 u8 u8 u8 u8 u8 u8")
+                kitronik_air_quality.setDate(
+                    dayOfMonth,
+                    month,
+                    year % YEAR_OFFSET
+                )
                 kitronik_air_quality.setTime(hour, min, sec)
                 console.log(`${dayOfMonth}, ${month}, ${year}`)
             }
