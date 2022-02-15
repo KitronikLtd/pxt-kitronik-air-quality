@@ -64,7 +64,7 @@ namespace kitronik_air_quality {
                     "u22.10",
                     () => readHumidity()
                 ),
-                /*
+                /* does not work
                 jacdac.createSimpleSensorServer(
                     "eCO2",
                     jacdac.SRV_E_CO2,
