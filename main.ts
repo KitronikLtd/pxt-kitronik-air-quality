@@ -1624,14 +1624,4 @@ namespace kitronik_air_quality {
             }
         }
     }
-
-    function startJacdac() {
-        if (!jacdac.isSimulator()) {
-            // start all servers on hardware
-            jacdac.createSimpleSensorServer("CO2", jacdac.)
-        }
-        if (jacdac.checkProxy())
-            jacdac.proxyFinalize()
-    }
-    startJacdac()
 }
