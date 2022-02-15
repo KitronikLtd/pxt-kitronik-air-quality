@@ -13,7 +13,6 @@
     },
     "files": [
         "README.md",
-        "main.blocks",
         "main.ts",
         "a_ReadBME688.md",
         "b_DisplayScreen.md",
