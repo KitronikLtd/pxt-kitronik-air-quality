@@ -1,12 +1,46 @@
 namespace kitronik_air_quality {
+    class CharacterScreenServer extends jacdac.Server {
+        textDirection = jacdac.CharacterScreenTextDirection.LeftToRight
+        message: string = ""
+
+        constructor() {
+            super("screen", jacdac.SRV_CHARACTER_SCREEN, {
+                variant: jacdac.CharacterScreenVariant.OLED,
+            })
+        }
+
+        handlePacket(pkt: jacdac.JDPacket): void {
+            this.textDirection = this.handleRegValue(pkt, jacdac.CharacterScreenReg.TextDirection, "u8",this.textDirection)
+            this.handleRegUInt32(pkt, jacdac.CharacterScreenReg.Columns, 26) // NUMBER_OF_CHAR_PER_LINE
+            this.handleRegUInt32(pkt, jacdac.CharacterScreenReg.Rows, 8) // NUMBER_OF_CHAR_PER_LINE
+
+            const oldMessage = this.message
+            this.message = this.handleRegValue(pkt, jacdac.CharacterScreenReg.Message, "s", this.message);
+            if (this.message != oldMessage)
+                this.syncMessage();
+        }
+
+        private syncMessage() {
+            if (!this.message)
+                kitronik_air_quality.clear()
+            else {
+                const lines = this.message.split("\n")
+                let i = 0;
+                for (; i < lines.length; ++i)
+                    kitronik_air_quality.show(lines[i], i + 1)
+                for (; i < 8; ++i)
+                    kitronik_air_quality.show("", i + 1)
+            }
+        }
+
+    }
+
     function startJacdac() {
         if (!jacdac.isSimulator()) {
             bme688Init()
-            pause(500)
             setupGasSensor()
-            pause(500)
             // start all servers on hardware
-            const servers: jacdac.SensorServer[] = [
+            const servers: jacdac.Server[] = [
                 jacdac.createSimpleSensorServer(
                     "temperature",
                     jacdac.SRV_TEMPERATURE,
@@ -30,12 +64,15 @@ namespace kitronik_air_quality {
                     "u22.10",
                     () => readHumidity()
                 ),
+                /*
                 jacdac.createSimpleSensorServer(
                     "eCO2",
                     jacdac.SRV_E_CO2,
                     "u22.10",
                     () => readeCO2()
                 ),
+                */
+                new CharacterScreenServer(),
             ]
             for (const server of servers) server.start()
         }
