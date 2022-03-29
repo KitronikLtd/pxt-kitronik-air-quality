@@ -11,7 +11,7 @@
         "kitronik_EEPROM": "github:KitronikLtd/pxt-kitronik-eeprom-base#v0.0.2",
         "kitronik_OLED": "github:KitronikLtd/pxt-kitronik-oled-base#v0.0.4",
         "jacdac": "github:microsoft/pxt-jacdac#v0.8.15",
-        "jacdac-e-co2": "github:microsoft/pxt-jacdac/e-co2#v0.8.7",
+        "jacdac-e-co2": "github:microsoft/pxt-jacdac/e-co2#v0.8.15",
         "jacdac-temperature": "github:microsoft/pxt-jacdac/temperature#v0.8.15",
         "jacdac-air-pressure": "github:microsoft/pxt-jacdac/air-pressure#v0.8.15",
         "jacdac-humidity": "github:microsoft/pxt-jacdac/humidity#v0.8.15",
