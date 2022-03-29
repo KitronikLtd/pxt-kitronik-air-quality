@@ -122,7 +122,7 @@ namespace kitronik_air_quality {
                 ),
                 jacdac.createSimpleSensorServer(
                     "pressure",
-                    jacdac.SRV_BAROMETER,
+                    jacdac.SRV_AIR_PRESSURE,
                     "u22.10",
                     () =>
                         readPressure(kitronik_air_quality.PressureUnitList.Pa) /
