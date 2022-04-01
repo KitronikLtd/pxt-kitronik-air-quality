@@ -7,11 +7,12 @@
         "radio": "*",
         "microphone": "*",
         "pxt-kitronik-air-quality": "github:pelikhan/pxt-kitronik-air-quality",
-        "jacdac-temperature": "github:microsoft/pxt-jacdac/temperature#v0.8.15",
-        "jacdac-air-pressure": "github:microsoft/pxt-jacdac/air-pressure#v0.8.15",
-        "jacdac-humidity": "github:microsoft/pxt-jacdac/humidity#v0.8.15",
-        "jacdac-character-screen": "github:microsoft/pxt-jacdac/character-screen#v0.8.15",
-        "jacdac-real-time-clock": "github:microsoft/pxt-jacdac/real-time-clock#v0.8.15"
+        "jacdac": "github:microsoft/pxt-jacdac",
+        "jacdac-temperature": "github:microsoft/pxt-jacdac/temperature",
+        "jacdac-air-pressure": "github:microsoft/pxt-jacdac/air-pressure",
+        "jacdac-humidity": "github:microsoft/pxt-jacdac/humidity",
+        "jacdac-character-screen": "github:microsoft/pxt-jacdac/character-screen",
+        "jacdac-real-time-clock": "github:microsoft/pxt-jacdac/real-time-clock"
     },
     "files": [
         "README.md",
