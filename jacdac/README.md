@@ -12,3 +12,12 @@ The functionality of the board are exposed as Jacdac servers instead of native b
 
 -   [ ] CO2 does not work
 -   [ ] RTC value is not queried on start (jacdac side issue)
+
+  
+## License
+
+MIT
+
+#### Metadata (used for search, rendering)
+
+* for PXT/microbit
