@@ -5,32 +5,32 @@
 */
 
 /**
- * Well known colors for ZIP LEDs
- */
+* Well known colors for ZIP LEDs
+*/
 enum ZipLedColors {
     //% block=red
-    Red = 0xff0000,
+    Red = 0xFF0000,
     //% block=orange
-    Orange = 0xffa500,
+    Orange = 0xFFA500,
     //% block=yellow
-    Yellow = 0xffff00,
+    Yellow = 0xFFFF00,
     //% block=green
-    Green = 0x00ff00,
+    Green = 0x00FF00,
     //% block=blue
-    Blue = 0x0000ff,
+    Blue = 0x0000FF,
     //% block=indigo
     Indigo = 0x4b0082,
     //% block=violet
     Violet = 0x8a2be2,
     //% block=purple
-    Purple = 0xff00ff,
+    Purple = 0xFF00FF,
     //% block=white
-    White = 0xffffff,
+    White = 0xFFFFFF,
     //% block=black
-    Black = 0x000000,
+    Black = 0x000000
 }
 
-/**
+/** 
  * Different time options for the Real Time Clock
  */
 enum TimeParameter {
@@ -39,7 +39,7 @@ enum TimeParameter {
     //% block=minutes
     Minutes,
     //% block=seconds
-    Seconds,
+    Seconds
 }
 
 /**
@@ -51,7 +51,7 @@ enum DateParameter {
     //% block=month
     Month,
     //% block=year
-    Year,
+    Year
 }
 
 //List of different temperature units
@@ -59,7 +59,7 @@ enum TemperatureUnitList {
     //% block="°C"
     C,
     //% block="°F"
-    F,
+    F
 }
 
 //List of different pressure units
@@ -67,7 +67,7 @@ enum PressureUnitList {
     //% block="Pa"
     Pa,
     //% block="mBar"
-    mBar,
+    mBar
 }
 
 /**
@@ -82,11 +82,11 @@ namespace kitronik_air_quality {
     ////////////////////////////////
 
     export class airQualityZIPLEDs {
-        buf: Buffer
-        pin: DigitalPin
-        brightness: number
-        start: number
-        _length: number
+        buf: Buffer;
+        pin: DigitalPin;
+        brightness: number;
+        start: number;
+        _length: number;
 
         /**
          * Rotate LEDs forward.
@@ -101,29 +101,29 @@ namespace kitronik_air_quality {
         }
 
         /**
-         * Shows all the ZIP LEDs as a given color (range 0-255 for r, g, b).
+         * Shows all the ZIP LEDs as a given color (range 0-255 for r, g, b). 
          * @param rgb RGB color of the LED
          */
         //% subcategory="ZIP LEDs"
-        //% blockId="kitronik_air_quality_display_set_strip_color" block="%statusLEDs|show color %rgb=kitronik_air_quality_colors"
+        //% blockId="kitronik_air_quality_display_set_strip_color" block="%statusLEDs|show color %rgb=kitronik_air_quality_colors" 
         //% weight=97 blockGap=8
         showColor(rgb: number) {
-            rgb = rgb >> 0
-            this.setAllRGB(rgb)
-            this.show()
+            rgb = rgb >> 0;
+            this.setAllRGB(rgb);
+            this.show();
         }
 
         /**
-         * Set particular ZIP LED to a given color.
+         * Set particular ZIP LED to a given color. 
          * You need to call ``show changes`` to make the changes visible.
          * @param zipLedNum position of the ZIP LED in the string
          * @param rgb RGB color of the ZIP LED
          */
         //% subcategory="ZIP LEDs"
-        //% blockId="kitronik_air_quality_set_zip_color" block="%statusLEDs|set ZIP LED %zipLedNum|to %rgb=kitronik_air_quality_colors"
+        //% blockId="kitronik_air_quality_set_zip_color" block="%statusLEDs|set ZIP LED %zipLedNum|to %rgb=kitronik_air_quality_colors" 
         //% weight=95 blockGap=8
         setZipLedColor(zipLedNum: number, rgb: number): void {
-            this.setPixelRGB(zipLedNum >> 0, rgb >> 0)
+            this.setPixelRGB(zipLedNum >> 0, rgb >> 0);
         }
 
         /**
@@ -133,14 +133,10 @@ namespace kitronik_air_quality {
         //% blockId="kitronik_air_quality_display_show" block="%statusLEDs|show"
         //% weight=94 blockGap=8
         show() {
-            //use the Kitronik version which respects brightness for all
+            //use the Kitronik version which respects brightness for all 
             //ws2812b.sendBuffer(this.buf, this.pin, this.brightness);
             // Use the pxt-microbit core version which now respects brightness (10/2020)
-            light.sendWS2812BufferWithBrightness(
-                this.buf,
-                this.pin,
-                this.brightness
-            )
+            light.sendWS2812BufferWithBrightness(this.buf, this.pin, this.brightness);
             control.waitMicros(100) // This looks messy, but it fixes the issue sometimes found when using multiple ZIP LED ranges, where the settings for the first range are clocked through to the next range. A short pause allows the ZIP LEDs to realise they need to stop pushing data.
         }
 
@@ -152,7 +148,7 @@ namespace kitronik_air_quality {
         //% blockId="kitronik_air_quality_display_clear" block="%statusLEDs|clear"
         //% weight=93 blockGap=8
         clear(): void {
-            this.buf.fill(0, this.start * 3, this._length * 3)
+            this.buf.fill(0, this.start * 3, this._length * 3);
         }
 
         /**
@@ -167,32 +163,28 @@ namespace kitronik_air_quality {
             //Clamp incoming variable at 0-255 as values out of this range cause unexpected brightnesses as the lower level code only expects a byte.
             if (brightness < 0) {
                 brightness = 0
-            } else if (brightness > 255) {
+            }
+            else if (brightness > 255) {
                 brightness = 255
             }
-            this.brightness = brightness & 0xff
+            this.brightness = brightness & 0xff;
             basic.pause(1) //add a pause to stop wierdnesses
         }
 
         //Sets up the buffer for pushing LED control data out to LEDs
-        private setBufferRGB(
-            offset: number,
-            red: number,
-            green: number,
-            blue: number
-        ): void {
-            this.buf[offset + 0] = green
-            this.buf[offset + 1] = red
-            this.buf[offset + 2] = blue
+        private setBufferRGB(offset: number, red: number, green: number, blue: number): void {
+            this.buf[offset + 0] = green;
+            this.buf[offset + 1] = red;
+            this.buf[offset + 2] = blue;
         }
 
         //Separates out Red, Green and Blue data and fills the LED control data buffer for all LEDs
         private setAllRGB(rgb: number) {
-            let red = unpackR(rgb)
-            let green = unpackG(rgb)
-            let blue = unpackB(rgb)
+            let red = unpackR(rgb);
+            let green = unpackG(rgb);
+            let blue = unpackB(rgb);
 
-            const end = this.start + this._length
+            const end = this.start + this._length;
             for (let i = this.start; i < end; ++i) {
                 this.setBufferRGB(i * 3, red, green, blue)
             }
@@ -200,13 +192,15 @@ namespace kitronik_air_quality {
 
         //Separates out Red, Green and Blue data and fills the LED control data buffer for a single LED
         private setPixelRGB(pixeloffset: number, rgb: number): void {
-            if (pixeloffset < 0 || pixeloffset >= this._length) return
+            if (pixeloffset < 0
+                || pixeloffset >= this._length)
+                return;
 
-            pixeloffset = (pixeloffset + this.start) * 3
+            pixeloffset = (pixeloffset + this.start) * 3;
 
-            let red = unpackR(rgb)
-            let green = unpackG(rgb)
-            let blue = unpackB(rgb)
+            let red = unpackR(rgb);
+            let green = unpackG(rgb);
+            let blue = unpackB(rgb);
 
             this.setBufferRGB(pixeloffset, red, green, blue)
         }
@@ -221,20 +215,20 @@ namespace kitronik_air_quality {
     //% trackArgs=0,2
     //% blockSetVariable=statusLEDs
     export function createAirQualityZIPDisplay(): airQualityZIPLEDs {
-        let statusLEDs = new airQualityZIPLEDs()
-        statusLEDs.buf = pins.createBuffer(9)
-        statusLEDs.start = 0
-        statusLEDs._length = 3
+        let statusLEDs = new airQualityZIPLEDs;
+        statusLEDs.buf = pins.createBuffer(9);
+        statusLEDs.start = 0;
+        statusLEDs._length = 3;
         statusLEDs.setBrightness(128)
-        statusLEDs.pin = DigitalPin.P8
-        pins.digitalWritePin(statusLEDs.pin, 0)
-        return statusLEDs
+        statusLEDs.pin = DigitalPin.P8;
+        pins.digitalWritePin(statusLEDs.pin, 0);
+        return statusLEDs;
     }
 
     /**
-     * Converts hue (0-360) to an RGB value.
-     * Does not attempt to modify luminosity or saturation.
-     * Colours end up fully saturated.
+     * Converts hue (0-360) to an RGB value. 
+     * Does not attempt to modify luminosity or saturation. 
+     * Colours end up fully saturated. 
      * @param hue value between 0 and 360
      */
     //% subcategory="ZIP LEDs"
@@ -246,29 +240,24 @@ namespace kitronik_air_quality {
         let greenVal = 0
         let blueVal = 0
         let hueStep = 2.125
-        if (hue >= 0 && hue < 120) {
-            //RedGreen section
-            greenVal = Math.floor(hue * hueStep)
+        if ((hue >= 0) && (hue < 120)) { //RedGreen section
+            greenVal = Math.floor((hue) * hueStep)
             redVal = 255 - greenVal
-        } else if (hue >= 120 && hue < 240) {
-            //GreenBlueSection
+        }
+        else if ((hue >= 120) && (hue < 240)) { //GreenBlueSection
             blueVal = Math.floor((hue - 120) * hueStep)
             greenVal = 255 - blueVal
-        } else if (hue >= 240 && hue < 360) {
-            //BlueRedSection
+        }
+        else if ((hue >= 240) && (hue < 360)) { //BlueRedSection
             redVal = Math.floor((hue - 240) * hueStep)
             blueVal = 255 - redVal
         }
-        return (
-            ((redVal & 0xff) << 16) |
-            ((greenVal & 0xff) << 8) |
-            (blueVal & 0xff)
-        )
+        return ((redVal & 0xFF) << 16) | ((greenVal & 0xFF) << 8) | (blueVal & 0xFF);
     }
 
-    /*  The LEDs we are using have centre wavelengths of 470nm (Blue) 525nm(Green) and 625nm (Red)
-     * 	 We blend these linearly to give the impression of the other wavelengths.
-     *   as we cant wavelength shift an actual LED... (Ye canna change the laws of physics Capt)*/
+    /*  The LEDs we are using have centre wavelengths of 470nm (Blue) 525nm(Green) and 625nm (Red) 
+    * 	 We blend these linearly to give the impression of the other wavelengths. 
+    *   as we cant wavelength shift an actual LED... (Ye canna change the laws of physics Capt)*/
 
     /**
      * Converts value to red, green, blue channels
@@ -280,88 +269,76 @@ namespace kitronik_air_quality {
     //% weight=1 blockGap=8
     //% blockId="kitronik_air_quality_rgb" block="red %red|green %green|blue %blue"
     export function rgb(red: number, green: number, blue: number): number {
-        return packRGB(red, green, blue)
+        return packRGB(red, green, blue);
     }
 
     /**
      * Gets the RGB value of a known color
-     */
+    */
     //% subcategory="ZIP LEDs"
     //% weight=2 blockGap=8
     //% blockId="kitronik_air_quality_colors" block="%color"
     export function colors(color: ZipLedColors): number {
-        return color
+        return color;
     }
 
     //Combines individual RGB settings to be a single number
     function packRGB(a: number, b: number, c: number): number {
-        return ((a & 0xff) << 16) | ((b & 0xff) << 8) | (c & 0xff)
+        return ((a & 0xFF) << 16) | ((b & 0xFF) << 8) | (c & 0xFF);
     }
     //Separates red value from combined number
     function unpackR(rgb: number): number {
-        let r = (rgb >> 16) & 0xff
-        return r
+        let r = (rgb >> 16) & 0xFF;
+        return r;
     }
     //Separates green value from combined number
     function unpackG(rgb: number): number {
-        let g = (rgb >> 8) & 0xff
-        return g
+        let g = (rgb >> 8) & 0xFF;
+        return g;
     }
     //Separates blue value from combined number
     function unpackB(rgb: number): number {
-        let b = rgb & 0xff
-        return b
+        let b = (rgb) & 0xFF;
+        return b;
     }
 
     /**
      * Converts a hue saturation luminosity value into a RGB color
      */
     function hsl(h: number, s: number, l: number): number {
-        h = Math.round(h)
-        s = Math.round(s)
-        l = Math.round(l)
+        h = Math.round(h);
+        s = Math.round(s);
+        l = Math.round(l);
 
-        h = h % 360
-        s = Math.clamp(0, 99, s)
-        l = Math.clamp(0, 99, l)
-        let c = Math.idiv(((100 - Math.abs(2 * l - 100)) * s) << 8, 10000) //chroma, [0,255]
-        let h1 = Math.idiv(h, 60) //[0,6]
-        let h2 = Math.idiv((h - h1 * 60) * 256, 60) //[0,255]
-        let temp = Math.abs((h1 % 2 << 8) + h2 - 256)
-        let x = (c * (256 - temp)) >> 8 //[0,255], second largest component of this color
-        let r$: number
-        let g$: number
-        let b$: number
+        h = h % 360;
+        s = Math.clamp(0, 99, s);
+        l = Math.clamp(0, 99, l);
+        let c = Math.idiv((((100 - Math.abs(2 * l - 100)) * s) << 8), 10000); //chroma, [0,255]
+        let h1 = Math.idiv(h, 60);//[0,6]
+        let h2 = Math.idiv((h - h1 * 60) * 256, 60);//[0,255]
+        let temp = Math.abs((((h1 % 2) << 8) + h2) - 256);
+        let x = (c * (256 - (temp))) >> 8;//[0,255], second largest component of this color
+        let r$: number;
+        let g$: number;
+        let b$: number;
         if (h1 == 0) {
-            r$ = c
-            g$ = x
-            b$ = 0
+            r$ = c; g$ = x; b$ = 0;
         } else if (h1 == 1) {
-            r$ = x
-            g$ = c
-            b$ = 0
+            r$ = x; g$ = c; b$ = 0;
         } else if (h1 == 2) {
-            r$ = 0
-            g$ = c
-            b$ = x
+            r$ = 0; g$ = c; b$ = x;
         } else if (h1 == 3) {
-            r$ = 0
-            g$ = x
-            b$ = c
+            r$ = 0; g$ = x; b$ = c;
         } else if (h1 == 4) {
-            r$ = x
-            g$ = 0
-            b$ = c
+            r$ = x; g$ = 0; b$ = c;
         } else if (h1 == 5) {
-            r$ = c
-            g$ = 0
-            b$ = x
+            r$ = c; g$ = 0; b$ = x;
         }
-        let m = Math.idiv(Math.idiv((l * 2) << 8, 100) - c, 2)
-        let r = r$ + m
-        let g = g$ + m
-        let b = b$ + m
-        return packRGB(r, g, b)
+        let m = Math.idiv((Math.idiv((l * 2 << 8), 100) - c), 2);
+        let r = r$ + m;
+        let g = g$ + m;
+        let b = b$ + m;
+        return packRGB(r, g, b);
     }
 
     /**
@@ -370,7 +347,7 @@ namespace kitronik_air_quality {
     export enum HueInterpolationDirection {
         Clockwise,
         CounterClockwise,
-        Shortest,
+        Shortest
     }
 
     ////////////////////////////////
@@ -386,7 +363,7 @@ namespace kitronik_air_quality {
         //% block="Centre"
         Centre,
         //% block="Right"
-        Right,
+        Right
     }
 
     /**
@@ -396,7 +373,7 @@ namespace kitronik_air_quality {
         //% block="horizontal"
         horizontal,
         //% block="vertical"
-        vertical,
+        vertical
     }
 
     // Constants for Display
@@ -405,13 +382,13 @@ namespace kitronik_air_quality {
     // Default address for the display
     let DISPLAY_ADDR_1 = 60
     let DISPLAY_ADDR_2 = 10
-    let displayAddress = DISPLAY_ADDR_1
+    let displayAddress = DISPLAY_ADDR_1;
 
     // Text alignment, defaulted to "Left"
     //let displayShowAlign = ShowAlign.Left
 
     // Screen buffers for sending data to the display
-    let pageBuf = pins.createBuffer(129)
+    let pageBuf = pins.createBuffer(129);
 
     /**
      * 'show' allows any number, string or variable to be displayed on the screen.
@@ -445,8 +422,9 @@ namespace kitronik_air_quality {
         // Otherwise, subtract '1' from the line number to return correct y value
         if (!line) {
             y = 0
-        } else {
-            y = line - 1
+        }
+        else {
+            y = (line - 1)
         }
 
         // Sort text into lines
@@ -469,55 +447,29 @@ namespace kitronik_air_quality {
         let saveString = ""
         if (inputString.length > NUMBER_OF_CHAR_PER_LINE) {
             if (y == 7) {
-                stringArray[numberOfStrings] = inputString.substr(
-                    0,
-                    NUMBER_OF_CHAR_PER_LINE - 1
-                )
+                stringArray[numberOfStrings] = inputString.substr(0, (NUMBER_OF_CHAR_PER_LINE - 1))
                 numberOfStrings = 1
-            } else {
-                for (
-                    let spaceFinder = 0;
-                    spaceFinder <= inputString.length;
-                    spaceFinder++
-                ) {
-                    if (inputString.charAt(spaceFinder) == " ") {
-                        // Check whether the character is a space, if so...
-                        spacePoint = spaceFinder // Remember the location of the new space found
-                        if (
-                            spacePoint - startOfString <
-                            NUMBER_OF_CHAR_PER_LINE
-                        ) {
-                            // Check if the current location minus start of string is less than number of char on a screen
-                            previousSpacePoint = spacePoint // Remember that point for later
-                            if (spaceFinder == inputString.length - 1) {
-                                saveString = inputString.substr(
-                                    startOfString,
-                                    spacePoint
-                                ) // Cut the string from start of word to the last space and store it
+            }
+            else {
+                for (let spaceFinder = 0; spaceFinder <= inputString.length; spaceFinder++) {
+                    if (inputString.charAt(spaceFinder) == " ") {                                // Check whether the character is a space, if so...
+                        spacePoint = spaceFinder                                                // Remember the location of the new space found
+                        if ((spacePoint - startOfString) < NUMBER_OF_CHAR_PER_LINE) {            // Check if the current location minus start of string is less than number of char on a screen
+                            previousSpacePoint = spacePoint                                     // Remember that point for later
+                            if (spaceFinder == (inputString.length - 1)) {
+                                saveString = inputString.substr(startOfString, spacePoint)      // Cut the string from start of word to the last space and store it
                                 stringArray[numberOfStrings] = saveString
                                 numberOfStrings += 1
                             }
-                        } else if (
-                            spacePoint - startOfString >
-                            NUMBER_OF_CHAR_PER_LINE
-                        ) {
-                            // Check if the current location minus start of string is greater than number of char on a screen
-                            saveString = inputString.substr(
-                                startOfString,
-                                previousSpacePoint
-                            ) // Cut the string from start of word to the last space and store it
+                        }
+                        else if ((spacePoint - startOfString) > NUMBER_OF_CHAR_PER_LINE) {       // Check if the current location minus start of string is greater than number of char on a screen
+                            saveString = inputString.substr(startOfString, previousSpacePoint)  // Cut the string from start of word to the last space and store it
                             stringArray[numberOfStrings] = saveString
-                            startOfString = previousSpacePoint + 1 // Set start of new word from last space plus one position
-                            numberOfStrings += 1 // Increase the number of strings variable
-                        } else if (
-                            spacePoint - startOfString ==
-                            NUMBER_OF_CHAR_PER_LINE
-                        ) {
-                            // Check if the current location minus start of string equals than number of char on a screen
-                            saveString = inputString.substr(
-                                startOfString,
-                                spacePoint
-                            )
+                            startOfString = previousSpacePoint + 1                              // Set start of new word from last space plus one position
+                            numberOfStrings += 1                                                // Increase the number of strings variable
+                        }
+                        else if ((spacePoint - startOfString) == NUMBER_OF_CHAR_PER_LINE) {      // Check if the current location minus start of string equals than number of char on a screen
+                            saveString = inputString.substr(startOfString, spacePoint)
                             stringArray[numberOfStrings] = saveString
                             startOfString = spacePoint + 1
                             previousSpacePoint = spacePoint
@@ -526,7 +478,8 @@ namespace kitronik_air_quality {
                     }
                 }
             }
-        } else {
+        }
+        else {
             stringArray[numberOfStrings] = inputString
             numberOfStrings += 1
         }
@@ -536,7 +489,7 @@ namespace kitronik_air_quality {
         let ind = 0
 
         // Set text alignment, fill up the screenBuffer with data and send to the display
-        for (let textLine = 0; textLine <= numberOfStrings - 1; textLine++) {
+        for (let textLine = 0; textLine <= (numberOfStrings - 1); textLine++) {
             let displayString = stringArray[textLine]
 
             //if (inputString.length < (NUMBER_OF_CHAR_PER_LINE - 1)) {
@@ -551,19 +504,13 @@ namespace kitronik_air_quality {
             //    }
             //}
 
-            for (
-                let charOfString = 0;
-                charOfString < displayString.length;
-                charOfString++
-            ) {
-                charDisplayBytes =
-                    kitronik_OLED.font[displayString.charCodeAt(charOfString)]
-                for (let k = 0; k < 5; k++) {
-                    // 'for' loop will take byte font array and load it into the correct register, then shift to the next byte to load into the next location
+            for (let charOfString = 0; charOfString < displayString.length; charOfString++) {
+                charDisplayBytes = kitronik_OLED.font[displayString.charCodeAt(charOfString)]
+                for (let k = 0; k < 5; k++) {  // 'for' loop will take byte font array and load it into the correct register, then shift to the next byte to load into the next location
                     col = 0
                     for (let l = 0; l < 5; l++) {
                         if (charDisplayBytes & (1 << (5 * k + l)))
-                            col |= 1 << (l + 1)
+                            col |= (1 << (l + 1))
                     }
 
                     //ind = (x + charOfString) * 5 + y * 128 + k + 1
@@ -599,9 +546,9 @@ namespace kitronik_air_quality {
             ///// IT WILL SHOW TEXT ON ALL 8 LINES IF THEY ARE ALL SET AS SEPARATE 'show' BLOCKS           /////
             ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            kitronik_OLED.set_pos(x * 5, y) // Set the start position to write to (page addressing mode)
+            kitronik_OLED.set_pos(x * 5, y)                               // Set the start position to write to (page addressing mode)
 
-            //let ind02 = x * 5 + y * 128
+            //let ind02 = x * 5 + y * 128 
             //let buf2 = screenBuf.slice(ind02, ((ind + 1) - ind02))
             //buf2[0] = 0x40
             //pins.i2cWriteBuffer(displayAddress, buf2)       // Send data to the screen
@@ -626,7 +573,7 @@ namespace kitronik_air_quality {
             //}
 
             pageBuf[0] = 0x40
-            pins.i2cWriteBuffer(displayAddress, pageBuf) // Send data to the screen
+            pins.i2cWriteBuffer(displayAddress, pageBuf)       // Send data to the screen
 
             y += 1
         }
@@ -651,12 +598,12 @@ namespace kitronik_air_quality {
         }
 
         // Subtract '1' from the line number to return correct y value
-        y = line - 1
+        y = (line - 1)
 
-        kitronik_OLED.set_pos(0, y) // Set the start position to write to (page addressing mode)
+        kitronik_OLED.set_pos(0, y)                               // Set the start position to write to (page addressing mode)
         pageBuf.fill(0)
         pageBuf[0] = 0x40
-        pins.i2cWriteBuffer(displayAddress, pageBuf) // Send data to the screen
+        pins.i2cWriteBuffer(displayAddress, pageBuf)       // Send data to the screen
     }
 
     /**
@@ -676,11 +623,11 @@ namespace kitronik_air_quality {
         //set_pos()               // Set position to the start of the screen
         //pins.i2cWriteBuffer(displayAddress, screenBuf)  // Write clear buffer to the screen
 
-        pageBuf.fill(0) // Fill the pageBuf with all '0'
+        pageBuf.fill(0)       // Fill the pageBuf with all '0'
         pageBuf[0] = 0x40
         for (let y = 0; y < 8; y++) {
-            kitronik_OLED.set_pos(0, y) // Set position to the start of the screen
-            pins.i2cWriteBuffer(displayAddress, pageBuf) // Write clear buffer to the screen
+            kitronik_OLED.set_pos(0, y)               // Set position to the start of the screen
+            pins.i2cWriteBuffer(displayAddress, pageBuf)  // Write clear buffer to the screen
         }
     }
 
@@ -695,7 +642,7 @@ namespace kitronik_air_quality {
         //% block="Single"
         Single = 0,
         //% block="Daily Repeating"
-        Repeating = 1,
+        Repeating = 1
     }
 
     /**
@@ -705,15 +652,15 @@ namespace kitronik_air_quality {
         //% block="Auto Silence"
         autoSilence = 1,
         //% block="User Silence"
-        userSilence = 2,
+        userSilence = 2
     }
 
-    let alarmHour = 0 //The hour setting for the alarm
-    let alarmMin = 0 //The minute setting for the alarm
-    export let alarmSetFlag = 0 //Flag set to '1' when an alarm is set
-    let alarmRepeat = 0 //If '1' shows that the alarm should remain set so it triggers at the next time match
-    let alarmOff = 0 //If '1' shows that alarm should auto switch off, if '2' the user must switch off
-    let alarmTriggered = 0 //Flag to show if the alarm has been triggered ('1') or not ('0')
+    let alarmHour = 0       //The hour setting for the alarm
+    let alarmMin = 0        //The minute setting for the alarm
+    export let alarmSetFlag = 0    //Flag set to '1' when an alarm is set
+    let alarmRepeat = 0     //If '1' shows that the alarm should remain set so it triggers at the next time match
+    let alarmOff = 0        //If '1' shows that alarm should auto switch off, if '2' the user must switch off 
+    let alarmTriggered = 0  //Flag to show if the alarm has been triggered ('1') or not ('0')
     let alarmTriggerHandler: Action
     let alarmHandler: Action
     let simpleCheck = 0 //If '1' shows that the alarmHandler is not required as the check is inside an "if" statement
@@ -723,55 +670,53 @@ namespace kitronik_air_quality {
      * @param setHours is to set the hours
      * @param setMinutes is to set the minutes
      * @param setSeconds is to set the seconds
-     */
+    */
     //% subcategory="Clock"
     //% group="Set Time"
-    //% blockId=kitronik_air_quality_set_time
+    //% blockId=kitronik_air_quality_set_time 
     //% block="Set Time to %setHours|hrs %setMinutes|mins %setSeconds|secs"
     //% setHours.min=0 setHours.max=23
     //% setMinutes.min=0 setMinutes.max=59
     //% setSeconds.min=0 setSeconds.max=59
     //% weight=100 blockGap=8
-    export function setTime(
-        setHours: number,
-        setMinutes: number,
-        setSeconds: number
-    ): void {
+    export function setTime(setHours: number, setMinutes: number, setSeconds: number): void {
+
         if (kitronik_RTC.initalised == false) {
             kitronik_RTC.secretIncantation()
         }
 
-        let bcdHours = kitronik_RTC.decToBcd(setHours) //Convert number to binary coded decimal
-        let bcdMinutes = kitronik_RTC.decToBcd(setMinutes) //Convert number to binary coded decimal
-        let bcdSeconds = kitronik_RTC.decToBcd(setSeconds) //Convert number to binary coded decimal
+        let bcdHours = kitronik_RTC.decToBcd(setHours)                           //Convert number to binary coded decimal
+        let bcdMinutes = kitronik_RTC.decToBcd(setMinutes)                       //Convert number to binary coded decimal
+        let bcdSeconds = kitronik_RTC.decToBcd(setSeconds)                       //Convert number to binary coded decimal
         let writeBuf = pins.createBuffer(2)
 
         writeBuf[0] = kitronik_RTC.RTC_SECONDS_REG
-        writeBuf[1] = kitronik_RTC.STOP_RTC //Disable Oscillator
+        writeBuf[1] = kitronik_RTC.STOP_RTC                                  //Disable Oscillator
         pins.i2cWriteBuffer(kitronik_RTC.CHIP_ADDRESS, writeBuf, false)
 
         writeBuf[0] = kitronik_RTC.RTC_HOURS_REG
-        writeBuf[1] = bcdHours //Send new Hours value
+        writeBuf[1] = bcdHours                                      //Send new Hours value
         pins.i2cWriteBuffer(kitronik_RTC.CHIP_ADDRESS, writeBuf, false)
 
         writeBuf[0] = kitronik_RTC.RTC_MINUTES_REG
-        writeBuf[1] = bcdMinutes //Send new Minutes value
+        writeBuf[1] = bcdMinutes                                    //Send new Minutes value
         pins.i2cWriteBuffer(kitronik_RTC.CHIP_ADDRESS, writeBuf, false)
 
         writeBuf[0] = kitronik_RTC.RTC_SECONDS_REG
-        writeBuf[1] = kitronik_RTC.START_RTC | bcdSeconds //Send new seconds masked with the Enable Oscillator
+        writeBuf[1] = kitronik_RTC.START_RTC | bcdSeconds                            //Send new seconds masked with the Enable Oscillator
         pins.i2cWriteBuffer(kitronik_RTC.CHIP_ADDRESS, writeBuf, false)
     }
 
     /**
      * Read time from RTC as a string
-     */
+    */
     //% subcategory="Clock"
     //% group="Read Time"
-    //% blockId=kitronik_air_quality_read_time
+    //% blockId=kitronik_air_quality_read_time 
     //% block="Read Time as String"
     //% weight=95 blockGap=8
     export function readTime(): string {
+
         if (kitronik_RTC.initalised == false) {
             kitronik_RTC.secretIncantation()
         }
@@ -779,30 +724,12 @@ namespace kitronik_air_quality {
         //read Values
         kitronik_RTC.readValue()
 
-        let decSeconds = kitronik_RTC.bcdToDec(
-            kitronik_RTC.currentSeconds,
-            kitronik_RTC.RTC_SECONDS_REG
-        ) //Convert number to Decimal
-        let decMinutes = kitronik_RTC.bcdToDec(
-            kitronik_RTC.currentMinutes,
-            kitronik_RTC.RTC_MINUTES_REG
-        ) //Convert number to Decimal
-        let decHours = kitronik_RTC.bcdToDec(
-            kitronik_RTC.currentHours,
-            kitronik_RTC.RTC_HOURS_REG
-        ) //Convert number to Decimal
+        let decSeconds = kitronik_RTC.bcdToDec(kitronik_RTC.currentSeconds, kitronik_RTC.RTC_SECONDS_REG)                  //Convert number to Decimal
+        let decMinutes = kitronik_RTC.bcdToDec(kitronik_RTC.currentMinutes, kitronik_RTC.RTC_MINUTES_REG)                  //Convert number to Decimal
+        let decHours = kitronik_RTC.bcdToDec(kitronik_RTC.currentHours, kitronik_RTC.RTC_HOURS_REG)                        //Convert number to Decimal
 
         //Combine hours,minutes and seconds in to one string
-        let strTime: string =
-            "" +
-            ((decHours / 10) >> 0) +
-            (decHours % 10) +
-            ":" +
-            ((decMinutes / 10) >> 0) +
-            (decMinutes % 10) +
-            ":" +
-            ((decSeconds / 10) >> 0) +
-            (decSeconds % 10)
+        let strTime: string = "" + ((decHours / 10) >> 0) + decHours % 10 + ":" + ((decMinutes / 10) >> 0) + decMinutes % 10 + ":" + ((decSeconds / 10) >> 0) + decSeconds % 10
 
         return strTime
     }
@@ -812,20 +739,17 @@ namespace kitronik_air_quality {
      * @param setDay is to set the day in terms of numbers 1 to 31
      * @param setMonths is to set the month in terms of numbers 1 to 12
      * @param setYears is to set the years in terms of numbers 0 to 99
-     */
+    */
     //% subcategory="Clock"
     //% group="Set Date"
-    //% blockId=kitronik_air_quality_set_date
+    //% blockId=kitronik_air_quality_set_date 
     //% block="Set Date to %setDays|Day %setMonths|Month %setYear|Year"
     //% setDay.min=1 setDay.max=31
     //% setMonth.min=1 setMonth.max=12
     //% setYear.min=0 setYear.max=99
     //% weight=90 blockGap=8
-    export function setDate(
-        setDay: number,
-        setMonth: number,
-        setYear: number
-    ): void {
+    export function setDate(setDay: number, setMonth: number, setYear: number): void {
+
         if (kitronik_RTC.initalised == false) {
             kitronik_RTC.secretIncantation()
         }
@@ -839,24 +763,26 @@ namespace kitronik_air_quality {
         let readCurrentSeconds = 0
 
         //Check day entered does not exceed month that has 30 days in
-        if (setMonth == 4 || setMonth == 6 || setMonth == 9 || setMonth == 11) {
+        if ((setMonth == 4) || (setMonth == 6) || (setMonth == 9) || (setMonth == 11)) {
             if (setDay == 31) {
                 setDay = 30
             }
         }
 
         //Leap year check and does not exceed 30 days
-        if (setMonth == 2 && setDay >= 29) {
+        if ((setMonth == 2) && (setDay >= 29)) {
             leapYearCheck = setYear % 4
-            if (leapYearCheck == 0) setDay = 29
-            else setDay = 28
+            if (leapYearCheck == 0)
+                setDay = 29
+            else
+                setDay = 28
         }
 
-        let weekday = kitronik_RTC.calcWeekday(setDay, setMonth, setYear + 2000)
+        let weekday = kitronik_RTC.calcWeekday(setDay, setMonth, (setYear + 2000))
 
-        bcdDay = kitronik_RTC.decToBcd(setDay) //Convert number to binary coded decimal
-        bcdMonths = kitronik_RTC.decToBcd(setMonth) //Convert number to binary coded decimal
-        bcdYears = kitronik_RTC.decToBcd(setYear) //Convert number to binary coded decimal
+        bcdDay = kitronik_RTC.decToBcd(setDay)                       //Convert number to binary coded decimal
+        bcdMonths = kitronik_RTC.decToBcd(setMonth)                  //Convert number to binary coded decimal
+        bcdYears = kitronik_RTC.decToBcd(setYear)                    //Convert number to binary coded decimal
 
         writeBuf[0] = kitronik_RTC.RTC_SECONDS_REG
         pins.i2cWriteBuffer(kitronik_RTC.CHIP_ADDRESS, writeBuf, false)
@@ -865,39 +791,40 @@ namespace kitronik_air_quality {
         readCurrentSeconds = readBuf[0]
 
         writeBuf[0] = kitronik_RTC.RTC_SECONDS_REG
-        writeBuf[1] = kitronik_RTC.STOP_RTC //Disable Oscillator
+        writeBuf[1] = kitronik_RTC.STOP_RTC                                  //Disable Oscillator
         pins.i2cWriteBuffer(kitronik_RTC.CHIP_ADDRESS, writeBuf, false)
 
         writeBuf[0] = kitronik_RTC.RTC_WEEKDAY_REG
-        writeBuf[1] = weekday //Send new Weekday value
+        writeBuf[1] = weekday                                        //Send new Weekday value
         pins.i2cWriteBuffer(kitronik_RTC.CHIP_ADDRESS, writeBuf, false)
 
         writeBuf[0] = kitronik_RTC.RTC_DAY_REG
-        writeBuf[1] = bcdDay //Send new Day value
+        writeBuf[1] = bcdDay                                        //Send new Day value
         pins.i2cWriteBuffer(kitronik_RTC.CHIP_ADDRESS, writeBuf, false)
 
         writeBuf[0] = kitronik_RTC.RTC_MONTH_REG
-        writeBuf[1] = bcdMonths //Send new Months value
+        writeBuf[1] = bcdMonths                                     //Send new Months value
         pins.i2cWriteBuffer(kitronik_RTC.CHIP_ADDRESS, writeBuf, false)
 
         writeBuf[0] = kitronik_RTC.RTC_YEAR_REG
-        writeBuf[1] = bcdYears //Send new Year value
+        writeBuf[1] = bcdYears                                      //Send new Year value
         pins.i2cWriteBuffer(kitronik_RTC.CHIP_ADDRESS, writeBuf, false)
 
         writeBuf[0] = kitronik_RTC.RTC_SECONDS_REG
-        writeBuf[1] = kitronik_RTC.START_RTC | readCurrentSeconds //Enable Oscillator
+        writeBuf[1] = kitronik_RTC.START_RTC | readCurrentSeconds                    //Enable Oscillator
         pins.i2cWriteBuffer(kitronik_RTC.CHIP_ADDRESS, writeBuf, false)
     }
 
     /**
      * Read date from RTC as a string
-     */
+    */
     //% subcategory="Clock"
     //% group="Read Date"
-    //% blockId=kitronik_air_quality_read_date
+    //% blockId=kitronik_air_quality_read_date 
     //% block="Read Date as String"
     //% weight=85 blockGap=8
     export function readDate(): string {
+
         if (kitronik_RTC.initalised == false) {
             kitronik_RTC.secretIncantation()
         }
@@ -905,40 +832,23 @@ namespace kitronik_air_quality {
         //read Values
         kitronik_RTC.readValue()
 
-        let decDay = kitronik_RTC.bcdToDec(
-            kitronik_RTC.currentDay,
-            kitronik_RTC.RTC_DAY_REG
-        ) //Convert number to Decimal
-        let decMonths = kitronik_RTC.bcdToDec(
-            kitronik_RTC.currentMonth,
-            kitronik_RTC.RTC_MONTH_REG
-        ) //Convert number to Decimal
-        let decYears = kitronik_RTC.bcdToDec(
-            kitronik_RTC.currentYear,
-            kitronik_RTC.RTC_YEAR_REG
-        ) //Convert number to Decimal
+        let decDay = kitronik_RTC.bcdToDec(kitronik_RTC.currentDay, kitronik_RTC.RTC_DAY_REG)                      //Convert number to Decimal
+        let decMonths = kitronik_RTC.bcdToDec(kitronik_RTC.currentMonth, kitronik_RTC.RTC_MONTH_REG)               //Convert number to Decimal
+        let decYears = kitronik_RTC.bcdToDec(kitronik_RTC.currentYear, kitronik_RTC.RTC_YEAR_REG)                  //Convert number to Decimal
 
         //let strDate: string = decDay + "/" + decMonths + "/" + decYears
-        let strDate: string =
-            "" +
-            ((decDay / 10) >> 0) +
-            (decDay % 10) +
-            "/" +
-            ((decMonths / 10) >> 0) +
-            (decMonths % 10) +
-            "/" +
-            ((decYears / 10) >> 0) +
-            (decYears % 10)
+        let strDate: string = "" + ((decDay / 10) >> 0) + (decDay % 10) + "/" + ((decMonths / 10) >> 0) + (decMonths % 10) + "/" + ((decYears / 10) >> 0) + (decYears % 10)
         return strDate
     }
 
     /**Read time parameter from RTC*/
     //% subcategory="Clock"
     //% group="Read Time"
-    //% blockId=kitronik_air_quality_read_time_parameter
+    //% blockId=kitronik_air_quality_read_time_parameter 
     //% block="Read %selectParameter| as Number"
     //% weight=75 blockGap=8
     export function readTimeParameter(selectParameter: TimeParameter): number {
+
         if (kitronik_RTC.initalised == false) {
             kitronik_RTC.secretIncantation()
         }
@@ -948,20 +858,13 @@ namespace kitronik_air_quality {
 
         //from enum convert the required time parameter and return
         if (selectParameter == TimeParameter.Hours) {
-            decParameter = kitronik_RTC.bcdToDec(
-                kitronik_RTC.currentHours,
-                kitronik_RTC.RTC_HOURS_REG
-            ) //Convert number to Decimal
-        } else if (selectParameter == TimeParameter.Minutes) {
-            decParameter = kitronik_RTC.bcdToDec(
-                kitronik_RTC.currentMinutes,
-                kitronik_RTC.RTC_MINUTES_REG
-            ) //Convert number to Decimal
-        } else if (selectParameter == TimeParameter.Seconds) {
-            decParameter = kitronik_RTC.bcdToDec(
-                kitronik_RTC.currentSeconds,
-                kitronik_RTC.RTC_SECONDS_REG
-            ) //Convert number to Decimal
+            decParameter = kitronik_RTC.bcdToDec(kitronik_RTC.currentHours, kitronik_RTC.RTC_HOURS_REG)                   //Convert number to Decimal
+        }
+        else if (selectParameter == TimeParameter.Minutes) {
+            decParameter = kitronik_RTC.bcdToDec(kitronik_RTC.currentMinutes, kitronik_RTC.RTC_MINUTES_REG)                  //Convert number to Decimal
+        }
+        else if (selectParameter == TimeParameter.Seconds) {
+            decParameter = kitronik_RTC.bcdToDec(kitronik_RTC.currentSeconds, kitronik_RTC.RTC_SECONDS_REG)                  //Convert number to Decimal
         }
 
         return decParameter
@@ -970,10 +873,11 @@ namespace kitronik_air_quality {
     /**Read time parameter from RTC*/
     //% subcategory="Clock"
     //% group="Read Date"
-    //% blockId=kitronik_air_quality_read_date_parameter
+    //% blockId=kitronik_air_quality_read_date_parameter 
     //% block="Read %selectParameter| as Number"
     //% weight=65 blockGap=8
     export function readDateParameter(selectParameter: DateParameter): number {
+
         if (kitronik_RTC.initalised == false) {
             kitronik_RTC.secretIncantation()
         }
@@ -983,20 +887,13 @@ namespace kitronik_air_quality {
 
         //from enum convert the required time parameter and return
         if (selectParameter == DateParameter.Day) {
-            decParameter = kitronik_RTC.bcdToDec(
-                kitronik_RTC.currentDay,
-                kitronik_RTC.RTC_DAY_REG
-            ) //Convert number to Decimal
-        } else if (selectParameter == DateParameter.Month) {
-            decParameter = kitronik_RTC.bcdToDec(
-                kitronik_RTC.currentMonth,
-                kitronik_RTC.RTC_MONTH_REG
-            ) //Convert number to Decimal
-        } else if (selectParameter == DateParameter.Year) {
-            decParameter = kitronik_RTC.bcdToDec(
-                kitronik_RTC.currentYear,
-                kitronik_RTC.RTC_YEAR_REG
-            ) //Convert number to Decimal
+            decParameter = kitronik_RTC.bcdToDec(kitronik_RTC.currentDay, kitronik_RTC.RTC_DAY_REG)                   //Convert number to Decimal
+        }
+        else if (selectParameter == DateParameter.Month) {
+            decParameter = kitronik_RTC.bcdToDec(kitronik_RTC.currentMonth, kitronik_RTC.RTC_MONTH_REG)                  //Convert number to Decimal
+        }
+        else if (selectParameter == DateParameter.Year) {
+            decParameter = kitronik_RTC.bcdToDec(kitronik_RTC.currentYear, kitronik_RTC.RTC_YEAR_REG)                   //Convert number to Decimal
         }
 
         return decParameter
@@ -1008,36 +905,33 @@ namespace kitronik_air_quality {
      * @param hour is the alarm hour setting (24 hour)
      * @param min is the alarm minute setting
      * @param alarmSilence determines whether the alarm turns off automatically or the user turns it off
-     */
+    */
     //% subcategory="Clock"
     //% group=Alarm
-    //% blockId=kitronik_air_quality_simple_set_alarm
+    //% blockId=kitronik_air_quality_simple_set_alarm 
     //% block="set %alarmType|alarm to %hour|:%min|with %alarmSilence"
     //% hour.min=0 hour.max=23
     //% min.min=0 min.max=59
     //% sec.min=0 sec.max=59
     //% inlineInputMode=inline
     //% weight=26 blockGap=8
-    export function simpleAlarmSet(
-        alarmType: AlarmType,
-        hour: number,
-        min: number,
-        alarmSilence: AlarmSilence
-    ): void {
+    export function simpleAlarmSet(alarmType: AlarmType, hour: number, min: number, alarmSilence: AlarmSilence): void {
         if (kitronik_RTC.initalised == false) {
             kitronik_RTC.secretIncantation()
         }
 
         if (alarmType == 1) {
-            alarmRepeat = 1 //Daily Repeating Alarm
-        } else {
-            alarmRepeat = 0 //Single Alarm
+            alarmRepeat = 1     //Daily Repeating Alarm
+        }
+        else {
+            alarmRepeat = 0     //Single Alarm
         }
 
         if (alarmSilence == 1) {
-            alarmOff = 1 //Auto Silence
-        } else if (alarmSilence == 2) {
-            alarmOff = 2 //User Silence
+            alarmOff = 1                //Auto Silence
+        }
+        else if (alarmSilence == 2) {
+            alarmOff = 2                //User Silence
         }
 
         alarmHour = hour
@@ -1063,12 +957,7 @@ namespace kitronik_air_quality {
             if (checkMin != alarmMin) {
                 alarmSetFlag = 0
                 alarmTriggered = 0
-                simpleAlarmSet(
-                    AlarmType.Repeating,
-                    alarmHour,
-                    alarmMin,
-                    alarmOff
-                ) //Reset the alarm after the current minute has changed
+                simpleAlarmSet(AlarmType.Repeating, alarmHour, alarmMin, alarmOff) //Reset the alarm after the current minute has changed
             }
         }
         if (checkHour == alarmHour && checkMin == alarmMin) {
@@ -1087,15 +976,11 @@ namespace kitronik_air_quality {
                             checkMin = readTimeParameter(TimeParameter.Minutes)
                         }
                         alarmTriggered = 0
-                        simpleAlarmSet(
-                            AlarmType.Repeating,
-                            alarmHour,
-                            alarmMin,
-                            alarmOff
-                        ) //Reset the alarm after the current minute has changed
+                        simpleAlarmSet(AlarmType.Repeating, alarmHour, alarmMin, alarmOff) //Reset the alarm after the current minute has changed
                     })
                 }
-            } else if (alarmOff == 2) {
+            }
+            else if (alarmOff == 2) {
                 if (simpleCheck != 1) {
                     alarmHandler() //This causes a problem for the simpleAlarmCheck() function, so only runs for onAlarmTrigger()
                 }
@@ -1120,21 +1005,17 @@ namespace kitronik_air_quality {
 
     /**
      * Determine if the alarm is triggered and return a boolean
-     */
+    */
     //% subcategory="Clock"
     //% group=Alarm
-    //% blockId=kitronik_air_quality_simple_check_alarm
+    //% blockId=kitronik_air_quality_simple_check_alarm 
     //% block="alarm triggered"
     //% weight=24 blockGap=8
     export function simpleAlarmCheck(): boolean {
         simpleCheck = 1 //Makes sure the alarmHandler() is not called
         let checkHour = readTimeParameter(TimeParameter.Hours)
         let checkMin = readTimeParameter(TimeParameter.Minutes)
-        if (
-            alarmSetFlag == 1 &&
-            checkHour == alarmHour &&
-            checkMin == alarmMin
-        ) {
+        if (alarmSetFlag == 1 && checkHour == alarmHour && checkMin == alarmMin) {
             if (alarmOff == 1) {
                 control.inBackground(() => {
                     basic.pause(2500)
@@ -1142,17 +1023,18 @@ namespace kitronik_air_quality {
                 })
             }
             return true
-        } else {
+        }
+        else {
             return false
         }
     }
 
     /**
      * Turn off the alarm
-     */
+    */
     //% subcategory="Clock"
     //% group=Alarm
-    //% blockId=kitronik_air_quality_alarm_off
+    //% blockId=kitronik_air_quality_alarm_off 
     //% block="turn off alarm"
     //% weight=23 blockGap=8
     export function simpleAlarmOff(): void {
@@ -1165,12 +1047,7 @@ namespace kitronik_air_quality {
                     checkMin = readTimeParameter(TimeParameter.Minutes)
                 }
                 alarmTriggered = 0
-                simpleAlarmSet(
-                    AlarmType.Repeating,
-                    alarmHour,
-                    alarmMin,
-                    alarmOff
-                ) //Reset the alarm after the current minute has changed
+                simpleAlarmSet(AlarmType.Repeating, alarmHour, alarmMin, alarmOff) //Reset the alarm after the current minute has changed
             })
         }
     }
@@ -1184,7 +1061,7 @@ namespace kitronik_air_quality {
         //% block="°C"
         C,
         //% block="°F"
-        F,
+        F
     }
 
     //List of different pressure units
@@ -1192,7 +1069,7 @@ namespace kitronik_air_quality {
         //% block="Pa"
         Pa,
         //% block="mBar"
-        mBar,
+        mBar
     }
 
     //Global variables used for storing one copy of value, these are used in multiple locations for calculations
@@ -1201,7 +1078,7 @@ namespace kitronik_air_quality {
 
     // Initialise the BME688, establishing communication, entering initial T, P & H oversampling rates, setup filter and do a first data reading (won't return gas)
     export function bme688Init(): void {
-        kitronik_BME688.initialise() // Call BME688 setup function in bme688-base extension
+        kitronik_BME688.initialise()    // Call BME688 setup function in bme688-base extension
 
         bme688InitialiseFlag = true
 
@@ -1210,8 +1087,8 @@ namespace kitronik_air_quality {
     }
 
     /**
-     * Setup the gas sensor ready to measure gas resistance.
-     */
+    * Setup the gas sensor ready to measure gas resistance.
+    */
     //% subcategory="Sensors"
     //% group="Setup"
     //% blockId=kitronik_air_quality_setup_gas_sensor
@@ -1222,14 +1099,14 @@ namespace kitronik_air_quality {
             bme688Init()
         }
 
-        kitronik_BME688.initGasSensor() // Call BME688 gas sensor setup function in bme-688 base extension
+        kitronik_BME688.initGasSensor()     // Call BME688 gas sensor setup function in bme-688 base extension
 
         gasInitialise = true
     }
 
     /**
-     * Run all measurements on the BME688: Temperature, Pressure, Humidity & Gas Resistance.
-     */
+    * Run all measurements on the BME688: Temperature, Pressure, Humidity & Gas Resistance.
+    */
     //% subcategory="Sensors"
     //% group="Measure"
     //% blockId=kitronik_air_quality_bme688_measure_all
@@ -1240,27 +1117,21 @@ namespace kitronik_air_quality {
             bme688Init()
         }
 
-        kitronik_BME688.readDataRegisters() // Call function in bme-688 base extension to read out all the data registers
+        kitronik_BME688.readDataRegisters()     // Call function in bme-688 base extension to read out all the data registers
 
         // Calculate the compensated reading values from the the raw ADC data
         kitronik_BME688.calcTemperature(kitronik_BME688.tRaw)
         kitronik_BME688.intCalcPressure(kitronik_BME688.pRaw)
-        kitronik_BME688.intCalcHumidity(
-            kitronik_BME688.hRaw,
-            kitronik_BME688.tRead
-        )
-        kitronik_BME688.intCalcGasResistance(
-            kitronik_BME688.gResRaw,
-            kitronik_BME688.gasRange
-        )
+        kitronik_BME688.intCalcHumidity(kitronik_BME688.hRaw, kitronik_BME688.tRead)
+        kitronik_BME688.intCalcGasResistance(kitronik_BME688.gResRaw, kitronik_BME688.gasRange)
     }
 
     // A baseline gas resistance is required for the IAQ calculation - it should be taken in a well ventilated area without obvious air pollutants
     // Take 60 readings over a ~5min period and find the mean
     /**
-     * Establish the baseline gas resistance reading and the ambient temperature.
-     * These values are required for air quality calculations.
-     */
+    * Establish the baseline gas resistance reading and the ambient temperature.
+    * These values are required for air quality calculations.
+    */
     //% subcategory="Sensors"
     //% group="Setup"
     //% blockId=kitronik_air_quality_establish_baselines
@@ -1276,7 +1147,7 @@ namespace kitronik_air_quality {
 
         show("Setting baselines", 4)
 
-        kitronik_BME688.establishBaselines() // Call function in bme688-base to read and calculate the baselines for gas resistance and ambient temperature
+        kitronik_BME688.establishBaselines()    // Call function in bme688-base to read and calculate the baselines for gas resistance and ambient temperature
 
         show("Setup Complete!", 5)
         basic.pause(2000)
@@ -1284,30 +1155,28 @@ namespace kitronik_air_quality {
     }
 
     /**
-     * Read Temperature from the sensor as a number.
-     * Units for temperature are in °C (Celsius) or °F (Fahrenheit) according to selection.
-     */
+    * Read Temperature from the sensor as a number.
+    * Units for temperature are in °C (Celsius) or °F (Fahrenheit) according to selection.
+    */
     //% subcategory="Sensors"
     //% group="Climate"
     //% blockId="kitronik_air_quality_read_temperature"
     //% block="Read Temperature in %temperature_unit"
     //% weight=100 blockGap=8
-    export function readTemperature(
-        temperature_unit: TemperatureUnitList
-    ): number {
+    export function readTemperature(temperature_unit: TemperatureUnitList): number {
         let temperature = kitronik_BME688.tRead
         // Change temperature from °C to °F if user selection requires it
         if (temperature_unit == TemperatureUnitList.F) {
-            temperature = (temperature * 18 + 320) / 10
+            temperature = ((temperature * 18) + 320) / 10
         }
 
         return temperature
     }
 
     /**
-     * Read Pressure from the sensor as a number.
-     * Units for pressure are in Pa (Pascals) or mBar (millibar) according to selection.
-     */
+    * Read Pressure from the sensor as a number.
+    * Units for pressure are in Pa (Pascals) or mBar (millibar) according to selection.
+    */
     //% subcategory="Sensors"
     //% group="Climate"
     //% blockId="kitronik_air_quality_read_pressure"
@@ -1316,15 +1185,16 @@ namespace kitronik_air_quality {
     export function readPressure(pressure_unit: PressureUnitList): number {
         let pressure = kitronik_BME688.pRead
         //Change pressure from Pascals to millibar if user selection requires it
-        if (pressure_unit == PressureUnitList.mBar) pressure = pressure / 100
+        if (pressure_unit == PressureUnitList.mBar)
+            pressure = pressure / 100
 
         return pressure
     }
 
     /**
-     * Read Humidity from the sensor as a number.
-     * Humidity is output as a percentage.
-     */
+    * Read Humidity from the sensor as a number.
+    * Humidity is output as a percentage.
+    */
     //% subcategory="Sensors"
     //% group="Climate"
     //% blockId="kitronik_air_quality_read_humidity"
@@ -1335,9 +1205,9 @@ namespace kitronik_air_quality {
     }
 
     /**
-     * Read eCO2 from sensor as a Number (250 - 40000+ppm).
-     * Units for eCO2 are in ppm (parts per million).
-     */
+    * Read eCO2 from sensor as a Number (250 - 40000+ppm).
+    * Units for eCO2 are in ppm (parts per million).
+    */
     //% subcategory="Sensors"
     //% group="Air Quality"
     //% blockId="kitronik_air_quality_read_eCO2"
@@ -1358,8 +1228,8 @@ namespace kitronik_air_quality {
     }
 
     /**
-     * Return the Air Quality rating as a percentage (0% = Bad, 100% = Excellent).
-     */
+    * Return the Air Quality rating as a percentage (0% = Bad, 100% = Excellent).
+    */
     //% subcategory="Sensors"
     //% group="Air Quality"
     //% blockId=kitronik_air_quality_iaq_percent
@@ -1378,9 +1248,9 @@ namespace kitronik_air_quality {
     }
 
     /**
-     * Return the Air Quality rating as an IAQ score (500 = Bad, 0 = Excellent).
-     * These values are based on the BME688 datasheet, Page 11, Table 6.
-     */
+    * Return the Air Quality rating as an IAQ score (500 = Bad, 0 = Excellent).
+    * These values are based on the BME688 datasheet, Page 11, Table 6.
+    */
     //% subcategory="Sensors"
     //% group="Air Quality"
     //% blockId=kitronik_air_quality_iaq_score
@@ -1412,39 +1282,19 @@ namespace kitronik_air_quality {
 
     // Store the Kitronik Header and standard data column headings in the reserved metadata EEPROM blocks
     function storeTitles(): void {
-        let kitronikHeader =
-            "Kitronik Data Logger - Air Quality & Environmental Board for BBC micro:bit - www.kitronik.co.uk\r\n£"
+        let kitronikHeader = "Kitronik Data Logger - Air Quality & Environmental Board for BBC micro:bit - www.kitronik.co.uk\r\n£"
         kitronik_EEPROM.writeBlock(kitronikHeader, 21)
 
         basic.pause(100)
 
-        let headings =
-            "Date" +
-            delimiter +
-            "Time" +
-            delimiter +
-            "Temperature" +
-            delimiter +
-            "Pressure" +
-            delimiter +
-            "Humidity" +
-            delimiter +
-            "IAQ Score" +
-            delimiter +
-            "eCO2" +
-            delimiter +
-            "Light" +
-            delimiter +
-            "\r\n£"
+        let headings = "Date" + delimiter + "Time" + delimiter + "Temperature" + delimiter + "Pressure" + delimiter + "Humidity" + delimiter + "IAQ Score" + delimiter + "eCO2" + delimiter + "Light" + delimiter + "\r\n£"
 
         kitronik_EEPROM.writeBlock(headings, 23)
 
         basic.pause(100)
 
-        entryNum =
-            (kitronik_EEPROM.readByte(12 * 128) << 8) |
-            kitronik_EEPROM.readByte(12 * 128 + 1) // Read from block 12 how many entries have been stored so far
-        entryNum = entryNum & 0xfff
+        entryNum = (kitronik_EEPROM.readByte(12 * 128) << 8) | (kitronik_EEPROM.readByte((12 * 128) + 1))              // Read from block 12 how many entries have been stored so far
+        entryNum = entryNum & 0xFFF
 
         writeTitles = true
     }
@@ -1461,8 +1311,7 @@ namespace kitronik_air_quality {
     //% block="add project info: Name %name|Subject %subject"
     //% inlineInputMode=inline
     export function addProjectInfo(name: string, subject: string): void {
-        let projectInfo =
-            "Name: " + name + "\r\n" + "Subject: " + subject + "\r\n£"
+        let projectInfo = "Name: " + name + "\r\n" + "Subject: " + subject + "\r\n£"
 
         kitronik_EEPROM.writeBlock(projectInfo, 22)
     }
@@ -1481,28 +1330,9 @@ namespace kitronik_air_quality {
             storeTitles()
         }
 
-        dataEntry =
-            readDate() +
-            delimiter +
-            readTime() +
-            delimiter +
-            readTemperature(TemperatureUnitList.C) +
-            delimiter +
-            readPressure(PressureUnitList.Pa) +
-            delimiter +
-            readHumidity() +
-            delimiter +
-            getAirQualityScore() +
-            delimiter +
-            readeCO2() +
-            delimiter +
-            input.lightLevel() +
-            delimiter
+        dataEntry = readDate() + delimiter + readTime() + delimiter + readTemperature(TemperatureUnitList.C) + delimiter + readPressure(PressureUnitList.Pa) + delimiter + readHumidity() + delimiter + getAirQualityScore() + delimiter + readeCO2() + delimiter + input.lightLevel() + delimiter
 
-        kitronik_EEPROM.writeBlock(
-            dataEntry + "\r\n£",
-            firstDataBlock + entryNum
-        )
+        kitronik_EEPROM.writeBlock(dataEntry + "\r\n£", firstDataBlock + entryNum)
 
         basic.pause(100)
 
@@ -1513,7 +1343,7 @@ namespace kitronik_air_quality {
         buf[0] = 0x06
         buf[1] = 0x00
         buf[2] = storedEntryNum >> 8
-        buf[3] = storedEntryNum & 0xff
+        buf[3] = storedEntryNum & 0xFF
         pins.i2cWriteBuffer(0x54, buf, false)
 
         //kitronik_EEPROM.writeByte((storedEntryNum >> 8), (12 * 128))              // Entry Number High Byte
@@ -1522,7 +1352,8 @@ namespace kitronik_air_quality {
         if (entryNum == 999) {
             dataFull = true
             entryNum = 0
-        } else {
+        }
+        else {
             entryNum++
         }
     }
@@ -1542,22 +1373,22 @@ namespace kitronik_air_quality {
         let i2cAddr = 0
 
         for (let byte = 2; byte < 130; byte++) {
-            blankBlock[byte] = 0xff
+            blankBlock[byte] = 0xFF
         }
         //for (let block = firstDataBlock; block < 1024; block++) {
         for (let block = 0; block < 1024; block++) {
             addr = block * 128
-            if (addr >> 16 == 0) {
-                // Select the required address (A16 as 0 or 1)
-                i2cAddr = kitronik_EEPROM.CAT24_I2C_BASE_ADDR // A16 = 0
-            } else {
-                i2cAddr = kitronik_EEPROM.CAT24_I2C_BASE_ADDR + 1 // A16 = 1
+            if ((addr >> 16) == 0) {                               // Select the required address (A16 as 0 or 1)
+                i2cAddr = kitronik_EEPROM.CAT24_I2C_BASE_ADDR                           // A16 = 0
+            }
+            else {
+                i2cAddr = kitronik_EEPROM.CAT24_I2C_BASE_ADDR + 1                       // A16 = 1
             }
 
-            blankBlock[0] = (addr >> 8) & 0xff // Memory location bits a15 - a8
-            blankBlock[1] = addr & 0xff // Memory location bits a7 - a0
+            blankBlock[0] = (addr >> 8) & 0xFF                            // Memory location bits a15 - a8
+            blankBlock[1] = addr & 0xFF                                   // Memory location bits a7 - a0
 
-            pins.i2cWriteBuffer(i2cAddr, blankBlock, false) // Write the data to the correct address
+            pins.i2cWriteBuffer(i2cAddr, blankBlock, false)                    // Write the data to the correct address
             basic.pause(5)
         }
 
@@ -1598,27 +1429,22 @@ namespace kitronik_air_quality {
         let data = ""
 
         header = kitronik_EEPROM.readBlock(21)
-        serial.writeString(header) // Send Kitronik Header
+        serial.writeString(header)      // Send Kitronik Header
         info = kitronik_EEPROM.readBlock(22)
-        serial.writeString(info) // Send Project Info
+        serial.writeString(info)        // Send Project Info
         titles = kitronik_EEPROM.readBlock(23)
-        serial.writeString(titles) // Send Data Column Headings
+        serial.writeString(titles)      // Send Data Column Headings
 
         if (dataFull) {
             for (block = firstDataBlock; block < 1024; block++) {
                 data = kitronik_EEPROM.readBlock(block)
                 serial.writeString(data)
             }
-        } else {
-            let readLastEntry =
-                (kitronik_EEPROM.readByte(12 * 128) << 8) |
-                kitronik_EEPROM.readByte(12 * 128 + 1) // Read from block 12 how many entries have been stored so far
-            lastEntry = readLastEntry & 0xfff
-            for (
-                block = firstDataBlock;
-                block < firstDataBlock + lastEntry + 2;
-                block++
-            ) {
+        }
+        else {
+            let readLastEntry = (kitronik_EEPROM.readByte(12 * 128) << 8) | (kitronik_EEPROM.readByte((12 * 128) + 1))              // Read from block 12 how many entries have been stored so far
+            lastEntry = readLastEntry & 0xFFF
+            for (block = firstDataBlock; block < (firstDataBlock + lastEntry + 2); block++) {
                 data = kitronik_EEPROM.readBlock(block)
                 serial.writeString(data)
             }
