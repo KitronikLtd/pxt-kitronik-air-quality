@@ -8,25 +8,25 @@
  * Well known colors for ZIP LEDs
  */
 enum ZipLedColors {
-    // block=red
+    //% block=red
     Red = 0xff0000,
-    // block=orange
+    //% block=orange
     Orange = 0xffa500,
-    // block=yellow
+    //% block=yellow
     Yellow = 0xffff00,
-    // block=green
+    //% block=green
     Green = 0x00ff00,
-    // block=blue
+    //% block=blue
     Blue = 0x0000ff,
-    // block=indigo
+    //% block=indigo
     Indigo = 0x4b0082,
-    // block=violet
+    //% block=violet
     Violet = 0x8a2be2,
-    // block=purple
+    //% block=purple
     Purple = 0xff00ff,
-    // block=white
+    //% block=white
     White = 0xffffff,
-    // block=black
+    //% block=black
     Black = 0x000000,
 }
 
@@ -34,11 +34,11 @@ enum ZipLedColors {
  * Different time options for the Real Time Clock
  */
 enum TimeParameter {
-    // block=hours
+    //% block=hours
     Hours,
-    // block=minutes
+    //% block=minutes
     Minutes,
-    // block=seconds
+    //% block=seconds
     Seconds,
 }
 
@@ -46,27 +46,27 @@ enum TimeParameter {
  * Different date options for the Real Time Clock
  */
 enum DateParameter {
-    // block=day
+    //% block=day
     Day,
-    // block=month
+    //% block=month
     Month,
-    // block=year
+    //% block=year
     Year,
 }
 
 //List of different temperature units
 enum TemperatureUnitList {
-    // block="°C"
+    //% block="°C"
     C,
-    // block="°F"
+    //% block="°F"
     F,
 }
 
 //List of different pressure units
 enum PressureUnitList {
-    // block="Pa"
+    //% block="Pa"
     Pa,
-    // block="mBar"
+    //% block="mBar"
     mBar,
 }
 
@@ -381,11 +381,11 @@ namespace kitronik_air_quality {
      * Select the alignment of text
      */
     export enum ShowAlign {
-        // block="Left"
+        //% block="Left"
         Left,
-        // block="Centre"
+        //% block="Centre"
         Centre,
-        // block="Right"
+        //% block="Right"
         Right,
     }
 
@@ -393,9 +393,9 @@ namespace kitronik_air_quality {
      * Select direction for drawing lines
      */
     export enum LineDirectionSelection {
-        // block="horizontal"
+        //% block="horizontal"
         horizontal,
-        // block="vertical"
+        //% block="vertical"
         vertical,
     }
 
@@ -692,9 +692,9 @@ namespace kitronik_air_quality {
      * Alarm repeat type
      */
     export enum AlarmType {
-        // block="Single"
+        //% block="Single"
         Single = 0,
-        // block="Daily Repeating"
+        //% block="Daily Repeating"
         Repeating = 1,
     }
 
@@ -702,9 +702,9 @@ namespace kitronik_air_quality {
      * Alarm silence type
      */
     export enum AlarmSilence {
-        // block="Auto Silence"
+        //% block="Auto Silence"
         autoSilence = 1,
-        // block="User Silence"
+        //% block="User Silence"
         userSilence = 2,
     }
 
@@ -727,7 +727,7 @@ namespace kitronik_air_quality {
     //% subcategory="Clock"
     //% group="Set Time"
     //% blockId=kitronik_air_quality_set_time
-    // block="Set Time to %setHours|hrs %setMinutes|mins %setSeconds|secs"
+    //% block="Set Time to %setHours|hrs %setMinutes|mins %setSeconds|secs"
     //% setHours.min=0 setHours.max=23
     //% setMinutes.min=0 setMinutes.max=59
     //% setSeconds.min=0 setSeconds.max=59
@@ -769,7 +769,7 @@ namespace kitronik_air_quality {
     //% subcategory="Clock"
     //% group="Read Time"
     //% blockId=kitronik_air_quality_read_time
-    // block="Read Time as String"
+    //% block="Read Time as String"
     //% weight=95 blockGap=8
     export function readTime(): string {
         if (kitronik_RTC.initalised == false) {
@@ -816,7 +816,7 @@ namespace kitronik_air_quality {
     //% subcategory="Clock"
     //% group="Set Date"
     //% blockId=kitronik_air_quality_set_date
-    // block="Set Date to %setDays|Day %setMonths|Month %setYear|Year"
+    //% block="Set Date to %setDays|Day %setMonths|Month %setYear|Year"
     //% setDay.min=1 setDay.max=31
     //% setMonth.min=1 setMonth.max=12
     //% setYear.min=0 setYear.max=99
@@ -895,7 +895,7 @@ namespace kitronik_air_quality {
     //% subcategory="Clock"
     //% group="Read Date"
     //% blockId=kitronik_air_quality_read_date
-    // block="Read Date as String"
+    //% block="Read Date as String"
     //% weight=85 blockGap=8
     export function readDate(): string {
         if (kitronik_RTC.initalised == false) {
@@ -936,7 +936,7 @@ namespace kitronik_air_quality {
     //% subcategory="Clock"
     //% group="Read Time"
     //% blockId=kitronik_air_quality_read_time_parameter
-    // block="Read %selectParameter| as Number"
+    //% block="Read %selectParameter| as Number"
     //% weight=75 blockGap=8
     export function readTimeParameter(selectParameter: TimeParameter): number {
         if (kitronik_RTC.initalised == false) {
@@ -971,7 +971,7 @@ namespace kitronik_air_quality {
     //% subcategory="Clock"
     //% group="Read Date"
     //% blockId=kitronik_air_quality_read_date_parameter
-    // block="Read %selectParameter| as Number"
+    //% block="Read %selectParameter| as Number"
     //% weight=65 blockGap=8
     export function readDateParameter(selectParameter: DateParameter): number {
         if (kitronik_RTC.initalised == false) {
@@ -1012,7 +1012,7 @@ namespace kitronik_air_quality {
     //% subcategory="Clock"
     //% group=Alarm
     //% blockId=kitronik_air_quality_simple_set_alarm
-    // block="set %alarmType|alarm to %hour|:%min|with %alarmSilence"
+    //% block="set %alarmType|alarm to %hour|:%min|with %alarmSilence"
     //% hour.min=0 hour.max=23
     //% min.min=0 min.max=59
     //% sec.min=0 sec.max=59
@@ -1124,7 +1124,7 @@ namespace kitronik_air_quality {
     //% subcategory="Clock"
     //% group=Alarm
     //% blockId=kitronik_air_quality_simple_check_alarm
-    // block="alarm triggered"
+    //% block="alarm triggered"
     //% weight=24 blockGap=8
     export function simpleAlarmCheck(): boolean {
         simpleCheck = 1 //Makes sure the alarmHandler() is not called
@@ -1153,7 +1153,7 @@ namespace kitronik_air_quality {
     //% subcategory="Clock"
     //% group=Alarm
     //% blockId=kitronik_air_quality_alarm_off
-    // block="turn off alarm"
+    //% block="turn off alarm"
     //% weight=23 blockGap=8
     export function simpleAlarmOff(): void {
         alarmSetFlag = 0
@@ -1181,17 +1181,17 @@ namespace kitronik_air_quality {
 
     //List of different temperature units
     export enum TemperatureUnitList {
-        // block="°C"
+        //% block="°C"
         C,
-        // block="°F"
+        //% block="°F"
         F,
     }
 
     //List of different pressure units
     export enum PressureUnitList {
-        // block="Pa"
+        //% block="Pa"
         Pa,
-        // block="mBar"
+        //% block="mBar"
         mBar,
     }
 
@@ -1215,7 +1215,7 @@ namespace kitronik_air_quality {
     //% subcategory="Sensors"
     //% group="Setup"
     //% blockId=kitronik_air_quality_setup_gas_sensor
-    // block="setup gas sensor"
+    //% block="setup gas sensor"
     //% weight=100 blockGap=8
     export function setupGasSensor(): void {
         if (bme688InitialiseFlag == false) {
@@ -1233,7 +1233,7 @@ namespace kitronik_air_quality {
     //% subcategory="Sensors"
     //% group="Measure"
     //% blockId=kitronik_air_quality_bme688_measure_all
-    // block="measure all data readings"
+    //% block="measure all data readings"
     //% weight=100 blockGap=8
     export function measureData(): void {
         if (bme688InitialiseFlag == false) {
@@ -1264,7 +1264,7 @@ namespace kitronik_air_quality {
     //% subcategory="Sensors"
     //% group="Setup"
     //% blockId=kitronik_air_quality_establish_baselines
-    // block="establish gas baseline & ambient temperature"
+    //% block="establish gas baseline & ambient temperature"
     //% weight=85 blockGap=8
     export function calcBaselines(): void {
         if (bme688InitialiseFlag == false) {
@@ -1290,7 +1290,7 @@ namespace kitronik_air_quality {
     //% subcategory="Sensors"
     //% group="Climate"
     //% blockId="kitronik_air_quality_read_temperature"
-    // block="Read Temperature in %temperature_unit"
+    //% block="Read Temperature in %temperature_unit"
     //% weight=100 blockGap=8
     export function readTemperature(
         temperature_unit: TemperatureUnitList
@@ -1311,7 +1311,7 @@ namespace kitronik_air_quality {
     //% subcategory="Sensors"
     //% group="Climate"
     //% blockId="kitronik_air_quality_read_pressure"
-    // block="Read Pressure in %pressure_unit"
+    //% block="Read Pressure in %pressure_unit"
     //% weight=95 blockGap=8
     export function readPressure(pressure_unit: PressureUnitList): number {
         let pressure = kitronik_BME688.pRead
@@ -1328,7 +1328,7 @@ namespace kitronik_air_quality {
     //% subcategory="Sensors"
     //% group="Climate"
     //% blockId="kitronik_air_quality_read_humidity"
-    // block="Read Humidity"
+    //% block="Read Humidity"
     //% weight=80 blockGap=8
     export function readHumidity(): number {
         return kitronik_BME688.hRead
@@ -1341,7 +1341,7 @@ namespace kitronik_air_quality {
     //% subcategory="Sensors"
     //% group="Air Quality"
     //% blockId="kitronik_air_quality_read_eCO2"
-    // block="Read eCO2"
+    //% block="Read eCO2"
     //% weight=95 blockGap=8
     export function readeCO2(): number {
         if (gasInitialise == false) {
@@ -1363,7 +1363,7 @@ namespace kitronik_air_quality {
     //% subcategory="Sensors"
     //% group="Air Quality"
     //% blockId=kitronik_air_quality_iaq_percent
-    // block="get IAQ \\%"
+    //% block="get IAQ \\%"
     //% weight=85 blockGap=8
     export function getAirQualityPercent(): number {
         if (gasInitialise == false) {
@@ -1384,7 +1384,7 @@ namespace kitronik_air_quality {
     //% subcategory="Sensors"
     //% group="Air Quality"
     //% blockId=kitronik_air_quality_iaq_score
-    // block="get IAQ Score"
+    //% block="get IAQ Score"
     //% weight=100 blockGap=8
     export function getAirQualityScore(): number {
         if (gasInitialise == false) {
@@ -1458,7 +1458,7 @@ namespace kitronik_air_quality {
     //% group="Settings"
     //% weight=80 blockGap=8
     //% blockId=kitronik_air_quality_project_info
-    // block="add project info: Name %name|Subject %subject"
+    //% block="add project info: Name %name|Subject %subject"
     //% inlineInputMode=inline
     export function addProjectInfo(name: string, subject: string): void {
         let projectInfo =
@@ -1475,7 +1475,7 @@ namespace kitronik_air_quality {
     //% group="Add Data"
     //% weight=100 blockGap=8
     //% blockId=kitronik_air_quality_log_data
-    // block="log data"
+    //% block="log data"
     export function logData(): void {
         if (writeTitles == false) {
             storeTitles()
@@ -1534,7 +1534,7 @@ namespace kitronik_air_quality {
     //% group="Add Data"
     //% weight=70 blockGap=8
     //% blockId=kitronik_air_quality_erase_data
-    // block="erase all data"
+    //% block="erase all data"
     export function eraseData(): void {
         show("Erasing Memory...", 2)
         let blankBlock = pins.createBuffer(130)
@@ -1586,7 +1586,7 @@ namespace kitronik_air_quality {
     //% group="Transfer"
     //% weight=65 blockGap=8
     //% blockId=kitronik_air_quality_send_all
-    // block="transmit all data"
+    //% block="transmit all data"
     export function sendAllData(): void {
         serial.redirectToUSB()
 

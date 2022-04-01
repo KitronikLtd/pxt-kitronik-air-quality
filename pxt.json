@@ -30,6 +30,5 @@
     "supportedTargets": [
         "microbit"
     ],
-    "preferredEditor": "tsprj",
-    "binaryonly": true
+    "preferredEditor": "tsprj"
 }
