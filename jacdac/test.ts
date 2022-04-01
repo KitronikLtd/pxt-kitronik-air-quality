@@ -1,6 +1,11 @@
 forever(() => {
-    console.logValue("temp", modules.temperature1.temperature())
-    console.logValue("airp", modules.airPressure1.pressure())
-    console.logValue("humi", modules.humidity1.humidity())
+    console.logValue("temp", modules.kitronikTemperature.temperature())
+    console.logValue("pres", modules.kitronikPressure.pressure())
+    console.logValue("humi", modules.kitronikHumidity.humidity())
+
+    modules.kitronikDisplay.setLine(0, "temp:" + modules.kitronikTemperature.temperature())
+    modules.kitronikDisplay.setLine(1, "pres:" + modules.kitronikPressure.pressure())
+    modules.kitronikDisplay.setLine(2, "humi:" + modules.kitronikHumidity.humidity())
+
     pause(1000)
 })

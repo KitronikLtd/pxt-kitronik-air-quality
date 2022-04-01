@@ -1,5 +1,5 @@
 //% deprecated
-namespace kitronik_air_quality {}
+namespace kitronik_air_quality { }
 
 namespace servers {
     class CharacterScreenServer extends jacdac.Server {
@@ -158,4 +158,36 @@ namespace servers {
         if (jacdac.checkProxy()) jacdac.proxyFinalize()
     }
     startJacdac()
+}
+
+namespace modules {
+    /**
+     * The air temperature sensor on the Kitronik air quality module
+     */
+    //% fixedInstance whenUsed block="kitronik temperature"
+    export const kitronikTemperature = new TemperatureClient("kitronik temperature?device=self")
+
+    /**
+     * The air pressure sensor on the Kitronik air quality module
+     */
+    //% fixedInstance whenUsed block="kitronik pressure"
+    export const kitronikPressure = new AirPressureClient("kitronik pressure?device=self")
+
+    /**
+     * The air humidity sensor on the Kitronik air quality module
+     */
+    //% fixedInstance whenUsed block="kitronik air humidity"
+    export const kitronikHumidity = new HumidityClient("kitronik humidity?device=self")
+
+    /**
+     * The character screen display on the Kitronik air quality module
+     */
+    //% fixedInstance whenUsed block="kitronik air CO2"
+    export const kitronikDisplay = new CharacterScreenClient("kitronik display?device=self")
+
+    /**
+     * The real time clock client on the Kitronik air quality module
+     */
+    //% fixedInstance whenUsed block="kitronik clock"
+    export const kitronikClock = new RealTimeClockClient("kitronik clock?device=self")
 }
