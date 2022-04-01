@@ -1,4 +1,7 @@
-namespace kitronik_air_quality {
+//% hidden
+namespace kitronik_air_quality {}
+
+namespace servers {
     class CharacterScreenServer extends jacdac.Server {
         textDirection = jacdac.CharacterScreenTextDirection.LeftToRight
         message: string = ""
@@ -107,8 +110,9 @@ namespace kitronik_air_quality {
 
     function startJacdac() {
         if (!jacdac.isSimulator()) {
-            bme688Init()
-            setupGasSensor()
+            kitronik_air_quality.bme688Init()
+            kitronik_air_quality.setupGasSensor()
+            kitronik_air_quality.calcBaselines()
             // start all servers on hardware
             const servers: jacdac.Server[] = [
                 jacdac.createSimpleSensorServer(
@@ -116,7 +120,7 @@ namespace kitronik_air_quality {
                     jacdac.SRV_TEMPERATURE,
                     "i22.10",
                     () =>
-                        readTemperature(
+                        kitronik_air_quality.readTemperature(
                             kitronik_air_quality.TemperatureUnitList.C
                         )
                 ),
@@ -125,14 +129,15 @@ namespace kitronik_air_quality {
                     jacdac.SRV_AIR_PRESSURE,
                     "u22.10",
                     () =>
-                        readPressure(kitronik_air_quality.PressureUnitList.Pa) /
-                        100
+                        kitronik_air_quality.readPressure(
+                            kitronik_air_quality.PressureUnitList.Pa
+                        ) / 100
                 ),
                 jacdac.createSimpleSensorServer(
                     "humidity",
                     jacdac.SRV_HUMIDITY,
                     "u22.10",
-                    () => readHumidity()
+                    () => kitronik_air_quality.readHumidity()
                 ),
                 /* does not work
                 jacdac.createSimpleSensorServer(

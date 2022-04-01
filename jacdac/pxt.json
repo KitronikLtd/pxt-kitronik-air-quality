@@ -1,0 +1,27 @@
+{
+    "name": "jacdac-kitronik-air-quality",
+    "version": "1.0.12",
+    "description": "",
+    "dependencies": {
+        "core": "*",
+        "radio": "*",
+        "microphone": "*",
+        "pxt-kitronik-air-quality": "github:pelikhan/pxt-kitronik-air-quality"
+    },
+    "files": [
+        "README.md",
+        "jacdac.ts"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "public": true,
+    "targetVersions": {
+        "target": "4.1.14",
+        "targetId": "microbit"
+    },
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "tsprj"
+}

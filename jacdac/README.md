@@ -1,4 +1,4 @@
-# Modified Kitronik Air Quality library
+# Jacdac Kitronik Air Quality library
 
 The functionality of the board are exposed as Jacdac servers instead of native blocs, so that the user can leverage the jacdac simulation in MakeCode. The Jacdac server are not enabled in the simulator and turned on when running on hardware.
 
