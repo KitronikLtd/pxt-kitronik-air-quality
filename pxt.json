@@ -1,6 +1,6 @@
 {
     "name": "pxt-kitronik-air-quality",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "description": "",
     "dependencies": {
         "core": "*",
@@ -19,12 +19,17 @@
         "c_DateandTime.md",
         "d_DataLogging.md"
     ],
-    "testFiles": ["test.ts"],
+    "testFiles": [
+        "test.ts"
+    ],
     "public": true,
     "targetVersions": {
         "target": "4.1.14",
         "targetId": "microbit"
     },
-    "supportedTargets": ["microbit"],
-    "preferredEditor": "tsprj"
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "tsprj",
+    "binaryonly": true
 }
