@@ -19,17 +19,12 @@
         "c_DateandTime.md",
         "d_DataLogging.md"
     ],
-    "testFiles": [
-        "test.ts"
-    ],
+    "testFiles": ["test.ts"],
     "public": true,
     "targetVersions": {
         "target": "4.1.14",
         "targetId": "microbit"
     },
-    "supportedTargets": [
-        "microbit"
-    ],
-    "preferredEditor": "tsprj",
-    "binaryonly": true
+    "supportedTargets": ["microbit"],
+    "preferredEditor": "tsprj"
 }
