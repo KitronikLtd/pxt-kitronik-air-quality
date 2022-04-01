@@ -1,4 +1,4 @@
-//% hidden
+//% deprecated
 namespace kitronik_air_quality {}
 
 namespace servers {
