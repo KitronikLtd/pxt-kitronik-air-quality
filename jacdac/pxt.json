@@ -11,26 +11,18 @@
         "jacdac-temperature": "github:microsoft/pxt-jacdac/temperature",
         "jacdac-air-pressure": "github:microsoft/pxt-jacdac/air-pressure",
         "jacdac-humidity": "github:microsoft/pxt-jacdac/humidity",
+        "jacdac-e-co2": "github:microsoft/pxt-jacdac/e-co2",
         "jacdac-character-screen": "github:microsoft/pxt-jacdac/character-screen",
         "jacdac-real-time-clock": "github:microsoft/pxt-jacdac/real-time-clock"
     },
-    "files": [
-        "README.md",
-        "jacdac.ts"
-    ],
-    "testFiles": [
-        "test.ts"
-    ],
+    "files": ["README.md", "jacdac.ts"],
+    "testFiles": ["test.ts"],
     "public": true,
     "targetVersions": {
         "target": "4.1.14",
         "targetId": "microbit"
     },
-    "supportedTargets": [
-        "microbit"
-    ],
+    "supportedTargets": ["microbit"],
     "preferredEditor": "tsprj",
-    "disablesVariants": [
-        "mbdal"
-    ]
+    "disablesVariants": ["mbdal"]
 }
