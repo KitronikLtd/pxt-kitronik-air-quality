@@ -118,7 +118,6 @@ namespace servers {
                     jacdac.SRV_TEMPERATURE,
                     "i22.10",
                     () => {
-                        led.toggle(0, 0)
                         return kitronik_air_quality.readTemperature(
                             kitronik_air_quality.TemperatureUnitList.C
                         )
