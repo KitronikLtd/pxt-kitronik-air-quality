@@ -17,7 +17,7 @@
     },
     "files": [
         "README.md",
-        "jacdac.ts"
+        "main.ts"
     ],
     "testFiles": [
         "test.ts"
