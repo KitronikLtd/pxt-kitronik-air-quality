@@ -1,6 +1,6 @@
 {
     "name": "jacdac-kitronik-air-quality",
-    "version": "1.0.17",
+    "version": "1.0.18",
     "description": "",
     "dependencies": {
         "core": "*",
@@ -33,5 +33,6 @@
     "preferredEditor": "tsprj",
     "disablesVariants": [
         "mbdal"
-    ]
+    ],
+    "binaryonly": true
 }
