@@ -102,7 +102,7 @@ namespace servers {
         }
     }
 
-    function startSelfServers() {
+    function start() {
         jacdac.startSelfServers(() => {
             kitronik_air_quality.bme688Init()
             kitronik_air_quality.setupGasSensor()
@@ -163,7 +163,7 @@ namespace servers {
             return servers
         })
     }
-    startSelfServers()
+    start()
 }
 
 namespace modules {
