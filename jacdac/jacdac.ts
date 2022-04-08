@@ -1,5 +1,5 @@
 //% deprecated
-namespace kitronik_air_quality {}
+namespace kitronik_air_quality { }
 
 namespace servers {
     class CharacterScreenServer extends jacdac.Server {
@@ -102,72 +102,65 @@ namespace servers {
         }
     }
 
-    function startJacdac() {
-        if (!jacdac.isSimulator()) {
-            kitronik_air_quality.bme688Init()
-            kitronik_air_quality.setupGasSensor()
-            const STREAMING_INTERVAL = 1000
-            forever(() => {
-                kitronik_air_quality.measureData()
-                pause(STREAMING_INTERVAL)
-            })
-            // start all servers on hardware
-            const servers: jacdac.Server[] = [
-                jacdac.createSimpleSensorServer(
-                    "temperature",
-                    jacdac.SRV_TEMPERATURE,
-                    "i22.10",
-                    () => {
-                        return kitronik_air_quality.readTemperature(
-                            kitronik_air_quality.TemperatureUnitList.C
-                        )
-                    },
-                    {
-                        streamingInterval: STREAMING_INTERVAL,
-                    }
-                ),
-                jacdac.createSimpleSensorServer(
-                    "pressure",
-                    jacdac.SRV_AIR_PRESSURE,
-                    "u22.10",
-                    () =>
-                        kitronik_air_quality.readPressure(
-                            kitronik_air_quality.PressureUnitList.Pa
-                        ) / 100,
-                    {
-                        streamingInterval: STREAMING_INTERVAL,
-                    }
-                ),
-                jacdac.createSimpleSensorServer(
-                    "humidity",
-                    jacdac.SRV_HUMIDITY,
-                    "u22.10",
-                    () => kitronik_air_quality.readHumidity(),
-                    {
-                        streamingInterval: STREAMING_INTERVAL,
-                    }
-                ),
-                jacdac.createSimpleSensorServer(
-                    "eCO2",
-                    jacdac.SRV_E_CO2,
-                    "u22.10",
-                    () => kitronik_air_quality.readeCO2(),
-                    {
-                        streamingInterval: STREAMING_INTERVAL,
-                        calibrate: () => kitronik_air_quality.calcBaselines(),
-                    }
-                ),
-                new RealTimeClockServer(),
-                new CharacterScreenServer(),
-            ]
-            for (const server of servers) server.start()
-        }
-
-        // in proxy mode, stop normal program execution
-        // and entry proxy mode
-        if (jacdac.checkProxy()) jacdac.proxyFinalize()
-    }
-    startJacdac()
+    jacdac.startSelfServers(() => {
+        kitronik_air_quality.bme688Init()
+        kitronik_air_quality.setupGasSensor()
+        const STREAMING_INTERVAL = 1000
+        forever(() => {
+            kitronik_air_quality.measureData()
+            pause(STREAMING_INTERVAL)
+        })
+        // start all servers on hardware
+        const servers: jacdac.Server[] = [
+            jacdac.createSimpleSensorServer(
+                "temperature",
+                jacdac.SRV_TEMPERATURE,
+                "i22.10",
+                () => {
+                    return kitronik_air_quality.readTemperature(
+                        kitronik_air_quality.TemperatureUnitList.C
+                    )
+                },
+                {
+                    streamingInterval: STREAMING_INTERVAL,
+                }
+            ),
+            jacdac.createSimpleSensorServer(
+                "pressure",
+                jacdac.SRV_AIR_PRESSURE,
+                "u22.10",
+                () =>
+                    kitronik_air_quality.readPressure(
+                        kitronik_air_quality.PressureUnitList.Pa
+                    ) / 100,
+                {
+                    streamingInterval: STREAMING_INTERVAL,
+                }
+            ),
+            jacdac.createSimpleSensorServer(
+                "humidity",
+                jacdac.SRV_HUMIDITY,
+                "u22.10",
+                () => kitronik_air_quality.readHumidity(),
+                {
+                    streamingInterval: STREAMING_INTERVAL,
+                }
+            ),
+            jacdac.createSimpleSensorServer(
+                "eCO2",
+                jacdac.SRV_E_CO2,
+                "u22.10",
+                () => kitronik_air_quality.readeCO2(),
+                {
+                    streamingInterval: STREAMING_INTERVAL,
+                    calibrate: () => kitronik_air_quality.calcBaselines(),
+                }
+            ),
+            new RealTimeClockServer(),
+            new CharacterScreenServer(),
+        ]
+        return servers
+    })
 }
 
 namespace modules {
