@@ -2,5 +2,8 @@
     "targetWebsite": "https://makecode.microbit.org/beta",
     "links": {
         "pxt-kitronik-air-quality": "."
-    }
+    },
+    "include": [
+        "../../links.json"
+    ]
 }

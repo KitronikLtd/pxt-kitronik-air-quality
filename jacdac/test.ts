@@ -1,5 +1,6 @@
 basic.showIcon(IconNames.Happy)
 forever(() => {
+    led.toggle(0, 0)
     console.logValue("temp", modules.kitronikTemperature.temperature())
     console.logValue("pres", modules.kitronikPressure.pressure())
     console.logValue("humi", modules.kitronikHumidity.humidity())
@@ -20,7 +21,5 @@ forever(() => {
         "humi:" + modules.kitronikHumidity.humidity()
     )
     modules.kitronikDisplay.setLine(5, "eco2:" + modules.kitronikCO2.eCO2())
-
-    led.toggle(0, 0)
     pause(1000)
 })
