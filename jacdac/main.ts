@@ -102,19 +102,21 @@ namespace servers {
         }
     }
 
+    function readSensors() {
+        kitronik_air_quality.bme688Init()
+        kitronik_air_quality.setupGasSensor()
+        kitronik_air_quality.measureData()
+        while (true) {
+            led.toggle(4, 0)
+            kitronik_air_quality.measureData()
+            pause(STREAMING_INTERVAL)
+        }
+    }
+
+    const STREAMING_INTERVAL = 1000
     function start() {
         led.toggle(1, 0)
         jacdac.startSelfServers(() => {
-            led.toggle(2, 0)
-            kitronik_air_quality.bme688Init()
-            kitronik_air_quality.setupGasSensor()
-            const STREAMING_INTERVAL = 1000
-            led.toggle(3, 0)
-            forever(() => {
-                led.toggle(4, 0)
-                kitronik_air_quality.measureData()
-                pause(STREAMING_INTERVAL)
-            })
             // start all servers on hardware
             const servers: jacdac.Server[] = [
                 jacdac.createSimpleSensorServer(
@@ -160,9 +162,11 @@ namespace servers {
                 new RealTimeClockServer(),
                 new CharacterScreenServer(),
             ]
+            control.runInBackground(() => readSensors())
             return servers
         })
     }
+
     start()
 }
 
