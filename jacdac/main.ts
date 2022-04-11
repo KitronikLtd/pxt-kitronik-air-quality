@@ -107,7 +107,6 @@ namespace servers {
         kitronik_air_quality.setupGasSensor()
         kitronik_air_quality.measureData()
         while (true) {
-            led.toggle(4, 0)
             kitronik_air_quality.measureData()
             pause(STREAMING_INTERVAL)
         }
@@ -115,7 +114,6 @@ namespace servers {
 
     const STREAMING_INTERVAL = 1000
     function start() {
-        led.toggle(1, 0)
         jacdac.startSelfServers(() => {
             // start all servers on hardware
             const servers: jacdac.Server[] = [
