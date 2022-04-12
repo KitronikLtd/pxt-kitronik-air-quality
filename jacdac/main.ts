@@ -212,6 +212,7 @@ namespace servers {
 
     const STREAMING_INTERVAL = 1000
     function start() {
+        jacdac.productIdentifier = 0x32e72267
         jacdac.startSelfServers(() => createServers())
     }
     start()
