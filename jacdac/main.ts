@@ -21,7 +21,7 @@ namespace modules {
     /**
      * The air humidity sensor on the Kitronik air quality module
      */
-    //% fixedInstance whenUsed block="kitronik air humidity"
+    //% fixedInstance whenUsed block="kitronik humidity"
     export const kitronikHumidity = new HumidityClient(
         "kitronik humidity?device=self"
     )
@@ -35,7 +35,7 @@ namespace modules {
     /**
      * The character screen display on the Kitronik air quality module
      */
-    //% fixedInstance whenUsed block="kitronik air CO2"
+    //% fixedInstance whenUsed block="kitronik display"
     export const kitronikDisplay = new CharacterScreenClient(
         "kitronik display?device=self"
     )
