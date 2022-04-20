@@ -1,6 +1,6 @@
 {
     "name": "jacdac-kitronik-air-quality",
-    "version": "1.0.22",
+    "version": "1.0.23",
     "description": "",
     "dependencies": {
         "core": "*",
