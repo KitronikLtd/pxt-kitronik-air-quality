@@ -233,7 +233,7 @@ namespace servers {
             // keep polling
             while (true) {
                 pause(STREAMING_INTERVAL)
-                if (!ready) // gas is calibrating
+                if (ready) // gas is calibrating
                     kitronik_air_quality.measureData()
             }
         })
