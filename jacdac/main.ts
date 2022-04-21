@@ -150,24 +150,16 @@ namespace servers {
         }
     }
 
-    function readSensors() {
-        kitronik_air_quality.bme688Init()
-        kitronik_air_quality.setupGasSensor()
-        kitronik_air_quality.measureData()
-        while (true) {
-            kitronik_air_quality.measureData()
-            pause(STREAMING_INTERVAL)
-        }
-    }
-
     function createServers() {
+        let ready = false
         // start all servers on hardware
         const servers: jacdac.Server[] = [
             jacdac.createSimpleSensorServer(
                 jacdac.SRV_TEMPERATURE,
                 jacdac.TemperatureRegPack.Temperature,
                 () => {
-                    return kitronik_air_quality.readTemperature(
+                    if (!ready) return undefined
+                    else return kitronik_air_quality.readTemperature(
                         kitronik_air_quality.TemperatureUnitList.C
                     )
                 },
@@ -178,10 +170,12 @@ namespace servers {
             jacdac.createSimpleSensorServer(
                 jacdac.SRV_AIR_PRESSURE,
                 jacdac.AirPressureRegPack.Pressure,
-                () =>
-                    kitronik_air_quality.readPressure(
+                () => {
+                    if (!ready) return undefined
+                    else return kitronik_air_quality.readPressure(
                         kitronik_air_quality.PressureUnitList.Pa
-                    ) / 100,
+                    ) / 100
+                },
                 {
                     streamingInterval: STREAMING_INTERVAL,
                 }
@@ -189,7 +183,10 @@ namespace servers {
             jacdac.createSimpleSensorServer(
                 jacdac.SRV_HUMIDITY,
                 jacdac.HumidityRegPack.Humidity,
-                () => kitronik_air_quality.readHumidity(),
+                () => {
+                    if (!ready) return undefined
+                    else return kitronik_air_quality.readHumidity()
+                },
                 {
                     streamingInterval: STREAMING_INTERVAL,
                 }
@@ -197,16 +194,33 @@ namespace servers {
             jacdac.createSimpleSensorServer(
                 jacdac.SRV_E_CO2,
                 jacdac.ECO2RegPack.ECO2,
-                () => kitronik_air_quality.readeCO2(),
+                () => {
+                    if (!ready) return undefined
+                    else return kitronik_air_quality.readeCO2()
+                },
                 {
                     streamingInterval: STREAMING_INTERVAL,
-                    calibrate: () => kitronik_air_quality.calcBaselines(),
+                    calibrate: () => {
+                        if (!ready) return
+                        ready = false
+                        kitronik_air_quality.calcBaselines()
+                        ready = true
+                    },
                 }
             ),
             new RealTimeClockServer(),
             new CharacterScreenServer(),
         ]
-        control.runInBackground(() => readSensors())
+        control.runInBackground(() => {
+            kitronik_air_quality.bme688Init()
+            kitronik_air_quality.setupGasSensor()
+            kitronik_air_quality.measureData()
+            ready = true
+            while (true) {
+                pause(STREAMING_INTERVAL)
+                kitronik_air_quality.measureData()
+            }
+        })
         return servers
     }
 
