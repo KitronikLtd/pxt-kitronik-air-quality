@@ -50,6 +50,8 @@ namespace modules {
 }
 
 namespace servers {
+    const STREAMING_INTERVAL = 1000
+
     class CharacterScreenServer extends jacdac.Server {
         textDirection = jacdac.CharacterScreenTextDirection.LeftToRight
         message: string = ""
@@ -153,7 +155,7 @@ namespace servers {
     function createServers() {
         let ready = false
         // start all servers on hardware
-        const servers: jacdac.Server[] = [
+        const envServers: jacdac.Server[] = [
             jacdac.createSimpleSensorServer(
                 jacdac.SRV_TEMPERATURE,
                 jacdac.TemperatureRegPack.Temperature,
@@ -208,23 +210,36 @@ namespace servers {
                     },
                 }
             ),
-            new RealTimeClockServer(),
-            new CharacterScreenServer(),
         ]
+
+        // notify user that the system is booting up
+        for(const serv of envServers)
+            serv.setStatusCode(jacdac.SystemStatusCodes.Initializing)
+
+        const servers = envServers.slice(0, envServers.length)
+            .concat([
+                new RealTimeClockServer(),
+                new CharacterScreenServer(),
+            ])
+            
         control.runInBackground(() => {
             kitronik_air_quality.bme688Init()
             kitronik_air_quality.setupGasSensor()
             kitronik_air_quality.measureData()
             ready = true
+            // notify user that the system is booting up
+            for (const serv of envServers)
+                serv.setStatusCode(jacdac.SystemStatusCodes.Ready)
+            // keep polling
             while (true) {
                 pause(STREAMING_INTERVAL)
-                kitronik_air_quality.measureData()
+                if (!ready) // gas is calibrating
+                    kitronik_air_quality.measureData()
             }
         })
         return servers
     }
 
-    const STREAMING_INTERVAL = 1000
     function start() {
         jacdac.productIdentifier = 0x32e72267
         jacdac.startSelfServers(() => createServers())
