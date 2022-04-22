@@ -37,7 +37,7 @@ namespace modules {
      */
     //% fixedInstance whenUsed block="kitronik display"
     export const kitronikDisplay = new CharacterScreenClient(
-        "kitronik display?device=self"
+        "kitronik display?device=self&rows=8&columns=26"
     )
 
     /**
