@@ -6,21 +6,21 @@ forever(() => {
     console.logValue("humi", modules.kitronikHumidity.humidity())
     console.logValue("eco2", modules.kitronikCO2.eCO2())
 
-    modules.kitronikDisplay.setLine(0, "milli:" + control.millis())
+    modules.kitronikDisplay.setLineValue(0, "milli", control.millis())
     modules.kitronikDisplay.setLine(1, "clock:" + modules.kitronikClock.hour() + ":" + modules.kitronikClock.min() + ":" + modules.kitronikClock.sec())
-    modules.kitronikDisplay.setLine(
+    modules.kitronikDisplay.setLineValue(
         2,
-        "temp:" + modules.kitronikTemperature.temperature()
+        "temp", modules.kitronikTemperature.temperature()
     )
-    modules.kitronikDisplay.setLine(
+    modules.kitronikDisplay.setLineValue(
         3,
-        "pres:" + modules.kitronikPressure.pressure()
+        "pres", modules.kitronikPressure.pressure()
     )
-    modules.kitronikDisplay.setLine(
+    modules.kitronikDisplay.setLineValue(
         4,
-        "humi:" + modules.kitronikHumidity.humidity()
+        "humi", modules.kitronikHumidity.humidity()
     )
-    modules.kitronikDisplay.setLine(5, "eco2:" + modules.kitronikCO2.eCO2())
+    modules.kitronikDisplay.setLineValue(5, "eco2", modules.kitronikCO2.eCO2())
 
     pause(1000)
 })
