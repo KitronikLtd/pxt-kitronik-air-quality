@@ -7,13 +7,13 @@
         "radio": "*",
         "microphone": "*",
         "pxt-kitronik-air-quality": "github:pelikhan/pxt-kitronik-air-quality",
-        "jacdac": "github:microsoft/pxt-jacdac#v0.9.11",
-        "jacdac-temperature": "github:microsoft/pxt-jacdac/temperature#v0.9.11",
-        "jacdac-air-pressure": "github:microsoft/pxt-jacdac/air-pressure#v0.9.11",
-        "jacdac-humidity": "github:microsoft/pxt-jacdac/humidity#v0.9.11",
-        "jacdac-e-co2": "github:microsoft/pxt-jacdac/e-co2#v0.9.11",
-        "jacdac-character-screen": "github:microsoft/pxt-jacdac/character-screen#v0.9.11",
-        "jacdac-real-time-clock": "github:microsoft/pxt-jacdac/real-time-clock#v0.9.11"
+        "jacdac": "github:microsoft/pxt-jacdac#v0.10.2",
+        "jacdac-temperature": "github:microsoft/pxt-jacdac/temperature#v0.10.2",
+        "jacdac-air-pressure": "github:microsoft/pxt-jacdac/air-pressure#v0.10.2",
+        "jacdac-humidity": "github:microsoft/pxt-jacdac/humidity#v0.10.2",
+        "jacdac-e-co2": "github:microsoft/pxt-jacdac/e-co2#v0.10.2",
+        "jacdac-character-screen": "github:microsoft/pxt-jacdac/character-screen#v0.10.2",
+        "jacdac-real-time-clock": "github:microsoft/pxt-jacdac/real-time-clock#v0.10.2"
     },
     "files": [
         "README.md",
@@ -24,7 +24,7 @@
     ],
     "public": true,
     "targetVersions": {
-        "target": "4.1.23",
+        "target": "4.1.24",
         "targetId": "microbit"
     },
     "supportedTargets": [

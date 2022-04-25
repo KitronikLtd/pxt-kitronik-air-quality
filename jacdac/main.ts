@@ -7,7 +7,7 @@ namespace modules {
      */
     //% fixedInstance whenUsed block="kitronik temperature"
     export const kitronikTemperature = new TemperatureClient(
-        "kitronik temperature?device=self"
+        "kitronik temperature?dev=self"
     )
 
     /**
@@ -15,7 +15,7 @@ namespace modules {
      */
     //% fixedInstance whenUsed block="kitronik pressure"
     export const kitronikPressure = new AirPressureClient(
-        "kitronik pressure?device=self"
+        "kitronik pressure?dev=self"
     )
 
     /**
@@ -23,21 +23,21 @@ namespace modules {
      */
     //% fixedInstance whenUsed block="kitronik humidity"
     export const kitronikHumidity = new HumidityClient(
-        "kitronik humidity?device=self"
+        "kitronik humidity?dev=self"
     )
 
     /**
      * The CO2 sensor on the Kitronik air quality module
      */
     //% fixedInstance whenUsed block="kitronik CO2"
-    export const kitronikCO2 = new ECO2Client("kitronik CO2?device=self")
+    export const kitronikCO2 = new ECO2Client("kitronik CO2?dev=self")
 
     /**
      * The character screen display on the Kitronik air quality module
      */
     //% fixedInstance whenUsed block="kitronik display"
     export const kitronikDisplay = new CharacterScreenClient(
-        "kitronik display?device=self&rows=8&columns=26"
+        "kitronik display?dev=self&rows=8&columns=26"
     )
 
     /**
@@ -45,7 +45,7 @@ namespace modules {
      */
     //% fixedInstance whenUsed block="kitronik clock"
     export const kitronikClock = new RealTimeClockClient(
-        "kitronik clock?device=self"
+        "kitronik clock?dev=self"
     )
 }
 
