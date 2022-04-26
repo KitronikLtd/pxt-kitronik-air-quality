@@ -159,12 +159,9 @@ namespace servers {
             jacdac.createSimpleSensorServer(
                 jacdac.SRV_TEMPERATURE,
                 jacdac.TemperatureRegPack.Temperature,
-                () => {
-                    if (!ready) return undefined
-                    else return kitronik_air_quality.readTemperature(
-                        kitronik_air_quality.TemperatureUnitList.C
-                    )
-                },
+                () => kitronik_air_quality.readTemperature(
+                    kitronik_air_quality.TemperatureUnitList.C
+                ),
                 {
                     streamingInterval: STREAMING_INTERVAL,
                     statusCode: jacdac.SystemStatusCodes.Initializing
@@ -173,12 +170,9 @@ namespace servers {
             jacdac.createSimpleSensorServer(
                 jacdac.SRV_AIR_PRESSURE,
                 jacdac.AirPressureRegPack.Pressure,
-                () => {
-                    if (!ready) return undefined
-                    else return kitronik_air_quality.readPressure(
-                        kitronik_air_quality.PressureUnitList.Pa
-                    ) / 100
-                },
+                () => kitronik_air_quality.readPressure(
+                    kitronik_air_quality.PressureUnitList.Pa
+                ) / 100,
                 {
                     streamingInterval: STREAMING_INTERVAL,
                     statusCode: jacdac.SystemStatusCodes.Initializing
@@ -187,10 +181,7 @@ namespace servers {
             jacdac.createSimpleSensorServer(
                 jacdac.SRV_HUMIDITY,
                 jacdac.HumidityRegPack.Humidity,
-                () => {
-                    if (!ready) return undefined
-                    else return kitronik_air_quality.readHumidity()
-                },
+                () => kitronik_air_quality.readHumidity(),
                 {
                     streamingInterval: STREAMING_INTERVAL,
                     statusCode: jacdac.SystemStatusCodes.Initializing
@@ -199,10 +190,7 @@ namespace servers {
             jacdac.createSimpleSensorServer(
                 jacdac.SRV_E_CO2,
                 jacdac.ECO2RegPack.ECO2,
-                () => {
-                    if (!ready) return undefined
-                    else return kitronik_air_quality.readeCO2()
-                },
+                () => kitronik_air_quality.readeCO2(),
                 {
                     streamingInterval: STREAMING_INTERVAL,
                     statusCode: jacdac.SystemStatusCodes.Initializing,
