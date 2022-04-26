@@ -167,6 +167,7 @@ namespace servers {
                 },
                 {
                     streamingInterval: STREAMING_INTERVAL,
+                    statusCode: jacdac.SystemStatusCodes.Initializing
                 }
             ),
             jacdac.createSimpleSensorServer(
@@ -180,6 +181,7 @@ namespace servers {
                 },
                 {
                     streamingInterval: STREAMING_INTERVAL,
+                    statusCode: jacdac.SystemStatusCodes.Initializing
                 }
             ),
             jacdac.createSimpleSensorServer(
@@ -191,6 +193,7 @@ namespace servers {
                 },
                 {
                     streamingInterval: STREAMING_INTERVAL,
+                    statusCode: jacdac.SystemStatusCodes.Initializing
                 }
             ),
             jacdac.createSimpleSensorServer(
@@ -202,6 +205,7 @@ namespace servers {
                 },
                 {
                     streamingInterval: STREAMING_INTERVAL,
+                    statusCode: jacdac.SystemStatusCodes.Initializing,
                     calibrate: () => {
                         if (!ready) return
                         ready = false
@@ -212,16 +216,12 @@ namespace servers {
             ),
         ]
 
-        // notify user that the system is booting up
-        for(const serv of envServers)
-            serv.setStatusCode(jacdac.SystemStatusCodes.Initializing)
-
         const servers = envServers.slice(0, envServers.length)
             .concat([
                 new RealTimeClockServer(),
                 new CharacterScreenServer(),
             ])
-            
+
         control.runInBackground(() => {
             kitronik_air_quality.bme688Init()
             kitronik_air_quality.setupGasSensor()
