@@ -22,5 +22,6 @@ forever(() => {
     )
     modules.kitronikDisplay.setLineValue(5, "eco2", modules.kitronikCO2.eCO2())
 
+    led.toggle(1, 0)
     pause(1000)
 })
