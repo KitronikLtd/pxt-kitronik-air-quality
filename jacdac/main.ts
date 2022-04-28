@@ -7,7 +7,7 @@ namespace modules {
      */
     //% fixedInstance whenUsed block="kitronik temperature"
     export const kitronikTemperature = new TemperatureClient(
-        "kitronik temperature?dev=self"
+        "kitronik temperature?dev=self&variant=Outdoor"
     )
 
     /**
@@ -37,7 +37,7 @@ namespace modules {
      */
     //% fixedInstance whenUsed block="kitronik display"
     export const kitronikDisplay = new CharacterScreenClient(
-        "kitronik display?dev=self&rows=8&columns=26"
+        "kitronik display?dev=self&rows=8&columns=26&variant=OLED"
     )
 
     /**
@@ -45,7 +45,7 @@ namespace modules {
      */
     //% fixedInstance whenUsed block="kitronik clock"
     export const kitronikClock = new RealTimeClockClient(
-        "kitronik clock?dev=self"
+        "kitronik clock?dev=self&variant=Crystal"
     )
 }
 
@@ -204,11 +204,10 @@ namespace servers {
             ),
         ]
 
-        const servers = envServers.slice(0, envServers.length)
-            .concat([
-                new RealTimeClockServer(),
-                new CharacterScreenServer(),
-            ])
+        const servers: jacdac.Server[] = 
+            [new CharacterScreenServer() as jacdac.Server]
+            .concat(envServers)
+            .concat([new RealTimeClockServer()])
 
         control.runInBackground(() => {
             kitronik_air_quality.bme688Init()
@@ -230,6 +229,7 @@ namespace servers {
 
     function start() {
         jacdac.productIdentifier = 0x32e72267
+        jacdac.deviceDescription = "Kitronik Air Quality"
         jacdac.startSelfServers(() => createServers())
     }
     start()
