@@ -1,6 +1,7 @@
 basic.showIcon(IconNames.Happy)
 forever(() => {
     led.toggle(0, 0)
+    console.logValue("sim", jacdac.isSimulator() ? "yes" : "no")
     console.logValue("temp", modules.kitronikTemperature.temperature())
     console.logValue("pres", modules.kitronikPressure.pressure())
     console.logValue("humi", modules.kitronikHumidity.humidity())
