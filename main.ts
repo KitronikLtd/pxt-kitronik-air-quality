@@ -1076,6 +1076,13 @@ namespace kitronik_air_quality {
     let bme688InitialiseFlag = false
     let gasInitialise = false
 
+    // Calculated readings of sensor parameters from raw adc readings
+    export let gRes = 0
+    let tRaw = 0    // adc reading of raw temperature
+    let gResRaw = 0  // adc reading of raw gas resistance
+    let gasRange = 0
+    let newAmbTemp = 0
+
     // Initialise the BME688, establishing communication, entering initial T, P & H oversampling rates, setup filter and do a first data reading (won't return gas)
     export function bme688Init(): void {
         kitronik_BME688.initialise()    // Call BME688 setup function in bme688-base extension
@@ -1146,8 +1153,34 @@ namespace kitronik_air_quality {
         }
 
         show("Setting baselines", 4)
+        show("0%", 5)
 
-        kitronik_BME688.establishBaselines()    // Call function in bme688-base to read and calculate the baselines for gas resistance and ambient temperature
+        // A baseline gas resistance is required for the IAQ calculation - it should be taken in a well ventilated area without obvious air pollutants
+        // Take 60 readings over a ~5min period and find the mean
+        // Establish the baseline gas resistance reading and the ambient temperature.
+        // These values are required for air quality calculations.
+        kitronik_BME688.setAmbTempFlag(false)
+
+        let burnInReadings = 0
+        let burnInData = 0
+        let ambTotal = 0
+        while (burnInReadings < 60) {               // Measure data and continue summing gas resistance until 60 readings have been taken
+            kitronik_BME688.readDataRegisters()
+            kitronik_BME688.calcTemperature(tRaw)
+            kitronik_BME688.intCalcGasResistance(gResRaw, gasRange)
+            burnInData += gRes
+            ambTotal += newAmbTemp
+            basic.pause(5000)
+            burnInReadings++
+            clearLine(5)
+            show(Math.round((burnInReadings / 60) * 100) + "%", 5)
+        }
+        kitronik_BME688.setGBase(Math.trunc(burnInData / 60))             // Find the mean gas resistance during the period to form the baseline
+        kitronik_BME688.tAmbient = Math.trunc(ambTotal / 60)    // Calculate the ambient temperature as the mean of the 60 initial readings
+
+        kitronik_BME688.setAmbTempFlag(true)
+
+        clear()
 
         show("Setup Complete!", 5)
         basic.pause(2000)

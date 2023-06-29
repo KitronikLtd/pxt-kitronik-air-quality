@@ -54,7 +54,7 @@ This will make an easier starting point for modifying the program to measure and
 
 ### Step 2
 The setup process requires some code to run when the micro:bit and board are first turned on, so this needs to go in the ``||basic:on start||`` bracket.  
-From the ``||kitronik_air_quality.Air Quality||`` cateogry, pull in the ``||kitronik_air_quality.setup gas sensor||`` block, followed by ``||kitronik_air_quality.establish gas baseline||``.  
+From the ``||kitronik_air_quality.Air Quality||`` cateogry, pull in the ``||kitronik_air_quality.setup gas sensor||`` block, followed by ``||kitronik_air_quality.establish gas baseline||``. The full gas sensor setup and baseline process takes around 5 minutes. It is important to wait for this process to finish before taking any readings, otherwise the readings will be inaccurate.
 
 #### ~ tutorialhint
 ```blocks
