@@ -1076,13 +1076,6 @@ namespace kitronik_air_quality {
     let bme688InitialiseFlag = false
     let gasInitialise = false
 
-    // Calculated readings of sensor parameters from raw adc readings
-    export let gRes = 0
-    let tRaw = 0    // adc reading of raw temperature
-    let gResRaw = 0  // adc reading of raw gas resistance
-    let gasRange = 0
-    let newAmbTemp = 0
-
     // Initialise the BME688, establishing communication, entering initial T, P & H oversampling rates, setup filter and do a first data reading (won't return gas)
     export function bme688Init(): void {
         kitronik_BME688.initialise()    // Call BME688 setup function in bme688-base extension
@@ -1159,17 +1152,17 @@ namespace kitronik_air_quality {
         // Take 60 readings over a ~5min period and find the mean
         // Establish the baseline gas resistance reading and the ambient temperature.
         // These values are required for air quality calculations.
-        kitronik_BME688.setAmbTempFlag(false)
+        kitronik_BME688.setAmbTempFlag(true)
 
         let burnInReadings = 0
         let burnInData = 0
         let ambTotal = 0
         while (burnInReadings < 60) {               // Measure data and continue summing gas resistance until 60 readings have been taken
             kitronik_BME688.readDataRegisters()
-            kitronik_BME688.calcTemperature(tRaw)
-            kitronik_BME688.intCalcGasResistance(gResRaw, gasRange)
-            burnInData += gRes
-            ambTotal += newAmbTemp
+            kitronik_BME688.calcTemperature(kitronik_BME688.tRaw)
+            kitronik_BME688.intCalcGasResistance(kitronik_BME688.gResRaw, kitronik_BME688.gasRange)
+            burnInData += kitronik_BME688.gRes
+            ambTotal += kitronik_BME688.tAmbient
             basic.pause(5000)
             burnInReadings++
             clearLine(5)
